@@ -1,23 +1,25 @@
 package com.phoenix.logistics.entity;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import javax.persistence.Id;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ApiModel("会员系统")
-public class Member {
+@ApiModel("Driver 司机")
+public class Driver {
 
-    private Integer user_id;
-    private Double point = 0.0;
-    private Integer if_member;
-    private Timestamp expire_time;
+    @Id
+    @ApiModelProperty("id")
+    private Long id;
 
+    @ApiModelProperty("状态")
+    private String name;
 }

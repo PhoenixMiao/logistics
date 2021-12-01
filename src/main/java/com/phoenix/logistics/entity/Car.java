@@ -1,5 +1,7 @@
 package com.phoenix.logistics.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,12 +13,12 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Collection_group {
-
+@ApiModel("Car 车辆")
+public class Car {
     @Id
+    @ApiModelProperty("id")
     private Long id;
-    private Integer user_id;
-    private String group_name;
-    private String collection_ids = "";
 
+    @ApiModelProperty("状态")
+    private String name;
 }
