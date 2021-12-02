@@ -15,5 +15,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Admin_role{
 	private String username;
-	private int superior;
 }

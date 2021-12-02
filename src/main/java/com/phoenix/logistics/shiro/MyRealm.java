@@ -1,9 +1,9 @@
 package com.phoenix.logistics.shiro;
 
 import com.phoenix.logistics.dto.UserDTO;
+import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.Admin_role;
-import com.phoenix.logistics.entity.Tb_admin_user;
-import com.phoenix.logistics.entity.Tb_user;
+import com.phoenix.logistics.entity.User;
 import com.phoenix.logistics.entity.User_role;
 import com.phoenix.logistics.mapper.AdminMapper;
 import com.phoenix.logistics.mapper.Admin_roleMapper;
@@ -46,26 +46,23 @@ public class MyRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         //管理员
-        if(type == 2 || type == 3){
-            info.addRole("user");
-            info.addRole("company");
+        if(type == 1){
+//            info.addRole("user");
             info.addRole("admin");
-            Admin_role admin_role = admin_roleMapper.getAdmin_roleByUsername(username);
-            if(admin_role != null && admin_role.getSuperior() == 1){
-                info.addRole("superior");
-            }
+//            Admin_role admin_role = admin_roleMapper.getAdmin_roleByUsername(username);
+//            if(admin_role != null && admin_role.getSuperior() == 1){
+//                info.addRole("superior");
+//            }
         }
 
         //普通用户
-        if(type == 0 || type == 1){
+        if(type == 0){
             info.addRole("user");
-            User_role user_role = user_roleMapper.getUser_roleByUsername(username);
-            if(user_role != null && user_role.getCompany() == 1){
-                info.addRole("company");
-            }
+//            User_role user_role = user_roleMapper.getUser_roleByUsername(username);
+//            if(user_role != null && user_role.getCompany() == 1){
+//                info.addRole("company");
+//            }
 
-            //默认都是企业账户了
-            info.addRole("company");
         }
         return info;
     }
@@ -85,33 +82,19 @@ public class MyRealm extends AuthorizingRealm {
         String password = new String(token.getPassword());
 
         //管理员
-        Tb_admin_user admin = adminMapper.getAdminByUsername(username);
-        if(admin != null && (admin.getUser_password()+"").equals(password)){
+        Admin admin = adminMapper.getAdminByUsername(username);
+        if(admin != null && (admin.getPassword()+"").equals(password)){
             UserDTO userDTO = new UserDTO(admin);
-
-            //如果是超级管理员账号，type置为3
-            Admin_role admin_role = admin_roleMapper.getAdmin_roleByUsername(username);
-            if(admin_role != null && admin_role.getSuperior() == 1){
-                userDTO.setType(3);
-            }
 
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDTO, token.getCredentials(), getName());
             return info;
         }
 
         //普通用户
-        Tb_user user = userMapper.getUserByUsername(username);
+        User user = userMapper.getUserByUsername(username);
         if(user != null && (user.getPassword()+"").equals(password)){
             UserDTO userDTO = new UserDTO(user);
 
-            //如果是企业账号，type置为1
-            User_role user_role = user_roleMapper.getUser_roleByUsername(username);
-            if(user_role != null && user_role.getCompany() == 1){
-                userDTO.setType(1);
-            }
-
-            //取消个人账户，全部为公司账户
-            userDTO.setType(1);
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDTO, token.getCredentials(), getName());
             return info;
         }

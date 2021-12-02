@@ -21,11 +21,14 @@ public class User
     @ApiModelProperty("用户id")
     private Long id;
 
-    @ApiModelProperty("创建时间")
-    private String create_time;
+    @ApiModelProperty("用户名（字面量与id相同）")
+    private String userName;
 
-    @ApiModelProperty("昵称")
-    private String nickname;
+    @ApiModelProperty("密码")
+    private String password;
+
+    @ApiModelProperty("创建时间")
+    private String createTime;
 
     @ApiModelProperty("性别")
     private Integer gender;
@@ -38,4 +41,5 @@ public class User
 
     @ApiModelProperty("头像")
     private String portrait;
+
 }

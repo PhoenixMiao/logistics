@@ -16,14 +16,14 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @ApiModel("ControllerMessage 管理员消息")
-public class ControllerMessage {
+public class AdminMessage {
 
     @Id
     @ApiModelProperty("id")
     private Long id;
 
     @ApiModelProperty("管理员id")
-    private Long controllerId;
+    private Long adminId;
 
     @ApiModelProperty("新状态")
     private Integer newStatus;
