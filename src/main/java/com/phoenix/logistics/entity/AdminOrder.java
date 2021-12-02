@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @ApiModel("ControllerOrder 管理员订单")
-public class ControllerOrder {
+public class AdminOrder {
 
     @Id
     @ApiModelProperty("id")
@@ -34,7 +34,7 @@ public class ControllerOrder {
     private Long staffId;
 
     @ApiModelProperty("管理人员的id")
-    private Long controllerId;
+    private Long adminId;
 
     @ApiModelProperty("状态")
     private Integer status;

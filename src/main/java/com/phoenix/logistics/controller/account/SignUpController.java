@@ -34,18 +34,18 @@ import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
 public class SignUpController {
 
     @Autowired
-    Producer producer;
-
-    @Autowired
     public SignUpService signUpService;
 
     @ResponseBody
-    @PostMapping("")
+    @PostMapping("singUp")
     @ApiOperation("注册")
-    @ApiImplicitParams({@ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "String")})
-    public Result signUp(@NotNull @Size(max = 20,min = 6) @RequestParam("password")String password){
-        id = signUpService.signUp(password);
-        return Result.success("注册成功，账号为" + id);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名（3到10个字）", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码（6到20位）", required = true, paramType = "query", dataType = "String")})
+    public Result signUp(@NotNull @Size(max = 10,min = 3) @RequestParam("username")String username,
+            @NotNull @Size(max = 20,min = 6) @RequestParam("password")String password){
+        signUpService.signUp(username,password);
+        return Result.success("注册成功!");
     }
 
 

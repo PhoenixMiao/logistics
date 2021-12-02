@@ -1,11 +1,11 @@
 package com.phoenix.logistics.dto;
 
-import com.phoenix.logistics.entity.Tb_user;
+import com.phoenix.logistics.entity.Admin;
+import com.phoenix.logistics.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.phoenix.logistics.entity.Tb_admin_user;
 
 @Data
 @NoArgsConstructor
@@ -13,20 +13,20 @@ import com.phoenix.logistics.entity.Tb_admin_user;
 @Builder
 public class UserDTO {
 
-    private int id;
+    private Long id;
     private String username;
-    private int type;//0为普通用户，1为企业用户，2为普通管理员，3为超管
+    private int type;//0为普通用户，1为管理员
 
-    public UserDTO(Tb_user user){
-        id = Integer.parseInt(user.getId()+"");
-        username = user.getUser_name();
+    public UserDTO(User user){
+        id = user.getId();
+        username = user.getUserName();
         type = 0;
     }
 
-    public UserDTO(Tb_admin_user admin){
+    public UserDTO(Admin admin){
         id = admin.getId();
-        username = admin.getUser_name();
-        type = 2;
+        username = admin.getUserName();
+        type = 1;
     }
 
 }

@@ -1,7 +1,5 @@
 package com.phoenix.logistics.service;
 
-import com.phoenix.logistics.mapper.CompanyMapper;
-import com.phoenix.logistics.mapper.InviteMapper;
 import com.phoenix.logistics.mapper.UserMapper;
 import com.phoenix.logistics.mapper.User_roleMapper;
 import com.phoenix.logistics.util.RedisUtil;
@@ -18,12 +16,7 @@ public class BaseService {
     public UserMapper userMapper;
 
     @Autowired
-    public InviteMapper inviteMapper;
-
-    @Autowired
     public User_roleMapper user_roleMapper;
 
-    @Autowired
-    public CompanyMapper companyMapper;
 
 }
