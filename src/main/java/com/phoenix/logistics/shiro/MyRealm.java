@@ -2,13 +2,9 @@ package com.phoenix.logistics.shiro;
 
 import com.phoenix.logistics.dto.UserDTO;
 import com.phoenix.logistics.entity.Admin;
-import com.phoenix.logistics.entity.Admin_role;
 import com.phoenix.logistics.entity.User;
-import com.phoenix.logistics.entity.User_role;
 import com.phoenix.logistics.mapper.AdminMapper;
-import com.phoenix.logistics.mapper.Admin_roleMapper;
 import com.phoenix.logistics.mapper.UserMapper;
-import com.phoenix.logistics.mapper.User_roleMapper;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -24,13 +20,8 @@ public class MyRealm extends AuthorizingRealm {
     UserMapper userMapper;
 
     @Autowired
-    User_roleMapper user_roleMapper;
-
-    @Autowired
     AdminMapper adminMapper;
 
-    @Autowired
-    Admin_roleMapper admin_roleMapper;
 
     //授权
     @Override
