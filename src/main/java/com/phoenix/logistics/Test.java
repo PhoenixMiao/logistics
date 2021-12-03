@@ -4,7 +4,7 @@ package com.phoenix.logistics;
  * @author Jyannis
  * @version 1.0 update on 2021/6/30
  */
-public class Test extends Car {
+public class Test extends Move {
 
     public Test() {
     }

@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class User_role{
-	private String userName;
+	private String username;
 }
