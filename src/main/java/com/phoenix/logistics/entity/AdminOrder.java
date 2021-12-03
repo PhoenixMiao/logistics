@@ -39,9 +39,6 @@ public class AdminOrder {
     @ApiModelProperty("状态")
     private Integer status;
 
-    @ApiModelProperty("预计运送时间")
-    private Integer transportTime;
-
     @ApiModelProperty("发货时间")
     private DateTime sendTime;
 
