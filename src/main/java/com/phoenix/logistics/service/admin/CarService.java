@@ -5,7 +5,7 @@ import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.Car;
 
 
-public interface AdminService {
+public interface CarService {
     //查看普通管理员列表
     Page<Car> getAllCars(int pageNum, int pageSize);
 
