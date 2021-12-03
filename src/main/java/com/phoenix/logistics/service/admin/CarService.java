@@ -11,5 +11,4 @@ public interface CarService {
 
     void addCar(Integer num);
 
-
 }

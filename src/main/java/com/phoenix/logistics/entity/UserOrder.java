@@ -21,26 +21,20 @@ public class UserOrder {
     @ApiModelProperty("id")
     private Long id;
 
-    @ApiModelProperty("发送人id")
-    private Long senderId;
+    @ApiModelProperty("发送人用户名")
+    private String senderUsername;
 
-    @ApiModelProperty("接受人id")
-    private Long receierId;
+    @ApiModelProperty("接受人用户名")
+    private String reciverUsername;
 
     @ApiModelProperty("状态")
     private Integer status;
 
-    @ApiModelProperty("发货地经度")
-    private Double originLng;
+    @ApiModelProperty("发货地地址")
+    private String originLocation;
 
-    @ApiModelProperty("发货地纬度")
-    private Double originLat;
-
-    @ApiModelProperty("收货地经度")
-    private Double destinationLng;
-
-    @ApiModelProperty("收货地经度")
-    private Double destinationLat;
+    @ApiModelProperty("收货地地址")
+    private String destinationLocation;
 
     @ApiModelProperty("提交时间")
     private DateTime commitTime;
@@ -48,4 +42,6 @@ public class UserOrder {
     @ApiModelProperty("收货时间")
     private DateTime receiveTime;
 
+    @ApiModelProperty("预计运送时间")
+    private Integer transportTime;
 }
