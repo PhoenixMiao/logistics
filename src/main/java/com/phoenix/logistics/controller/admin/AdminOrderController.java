@@ -33,8 +33,8 @@ public class AdminOrderController {
     public Result DealAdminOrder(@NotNull @RequestParam("id")Long id,@NotNull@RequestParam("carId")Long carId,@NotNull@RequestParam("driverId")Long driverId){
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
-        Long userOrderId = adminOrderService.dealAdminOrder(id,carId,driverId,username);
-        return Result.success("分配成功",userOrderId);
+        adminOrderService.dealAdminOrder(id,carId,driverId,username);
+        return Result.success("分配成功");
     }
 
     @PostMapping("/arrive")
@@ -43,6 +43,12 @@ public class AdminOrderController {
     public Result goodsArrive(@NotNull@RequestParam("id")Long id){
         if(adminOrderService.goodsArrive(id)==0) return Result.fail("货物尚未处理");
         return Result.success("货物已到达");
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("通过id获取订单详情")
+    public Result getAdminOrderById(@PathVariable("id")Long id){
+        return Result.success("获取成功！！",adminOrderService.getAdminOrderById(id));
     }
 
 

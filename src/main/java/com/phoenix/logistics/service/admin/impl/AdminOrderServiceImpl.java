@@ -1,6 +1,7 @@
 package com.phoenix.logistics.service.admin.impl;
 
 
+import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.AdminOrder;
 import com.phoenix.logistics.mapper.AdminOrderMapper;
 import com.phoenix.logistics.mapper.CarMapper;
@@ -31,7 +32,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     DriverMapper driverMapper;
 
     @Override
-    public Long dealAdminOrder(Long id,Long carId,Long driverId,String adminUsername){
+    public void dealAdminOrder(Long id,Long carId,Long driverId,String adminUsername){
         //Integer tranTime = DisTranUtil.tranTime(submitUserOrderRequest.getOriginLng(),submitUserOrderRequest.getOriginLat(),submitUserOrderRequest.getDestinationLng(),submitUserOrderRequest.getDestinationLat());
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -45,10 +46,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         adminOrderMapper.DealAdminOrder(carId,driverId,adminUsername,1,currentTime,arriveTime,currentTime,id);
         carMapper.allocateCar(1,carId);
         driverMapper.allocateDriver(1,driverId);
-        AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(id);
-        userOrderMapper.changStatus(1,currentTime,adminOrder.getUserOrderId());
-        return adminOrder.getUserOrderId();
     }
+
 
     @Override
     public int goodsArrive(Long id){
@@ -62,5 +61,10 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         driverMapper.allocateDriver(0,adminOrder.getDriverId());
         userOrderMapper.changStatus(2,currentTime,adminOrder.getUserOrderId());
         return 1;
+    }
+
+    @Override
+    public AdminOrder getAdminOrderById(Long id){
+        return adminOrderMapper.getAdminOrderById(id);
     }
 }
