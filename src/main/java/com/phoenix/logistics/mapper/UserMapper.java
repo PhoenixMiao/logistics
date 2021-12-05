@@ -14,10 +14,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper extends MyMapper<User> {
 
-    @Update("UPDATE user SET password=#{password} WHERE user_name=#{username}")
+    @Update("UPDATE user SET password=#{password} WHERE userName=#{username}")
     int updatePasswordByUsername(@Param("password")String password,@Param("username")String username);
 
-    @Select("SELECT * FROM user WHERE user_name=#{user_name}")
+    @Select("SELECT * FROM user WHERE userName=#{userName}")
     User getUserByUsername(String username);
 
     @Select("SELECT * FROM user WHERE id=#{id}")
