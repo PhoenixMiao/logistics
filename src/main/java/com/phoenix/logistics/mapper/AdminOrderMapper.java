@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdminOrderMapper extends MyMapper<AdminOrder> {
-    @Insert("INSERT INTO adminOrder(userOrderdId,goodsId,transportTime,status,statusUpdateTime) VALUES (#{userOrderId},#{goodsId},#{transportTime},#{status},#{statusUpdateTime})")
+    @Insert("INSERT INTO adminOrder(userOrderId,goodsId,transportTime,status,statusUpdateTime) VALUES (#{userOrderId},#{goodsId},#{transportTime},#{status},#{statusUpdateTime})")
     @Options(useGeneratedKeys=true, keyProperty="id")
     int newAdminOrder(AdminOrder adminOrder);
 

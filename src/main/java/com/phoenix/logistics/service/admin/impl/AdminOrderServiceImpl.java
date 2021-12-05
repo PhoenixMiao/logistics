@@ -1,8 +1,8 @@
 package com.phoenix.logistics.service.admin.impl;
 
 
-import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.AdminOrder;
+import com.phoenix.logistics.entity.UserOrder;
 import com.phoenix.logistics.mapper.AdminOrderMapper;
 import com.phoenix.logistics.mapper.CarMapper;
 import com.phoenix.logistics.mapper.DriverMapper;
@@ -12,6 +12,7 @@ import com.phoenix.logistics.util.DisTranUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,6 +47,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         adminOrderMapper.DealAdminOrder(carId,driverId,adminUsername,1,currentTime,arriveTime,currentTime,id);
         carMapper.allocateCar(1,carId);
         driverMapper.allocateDriver(1,driverId);
+        AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(id);
+        userOrderMapper.changStatus(adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),adminOrder.getUserOrderId());
     }
 
 
@@ -67,4 +70,5 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     public AdminOrder getAdminOrderById(Long id){
         return adminOrderMapper.getAdminOrderById(id);
     }
+
 }

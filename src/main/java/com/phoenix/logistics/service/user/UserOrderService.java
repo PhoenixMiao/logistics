@@ -10,8 +10,4 @@ public interface UserOrderService {
     HashMap<String,Long> submitUserOrder(SubmitUserOrderRequest submitUserOrderRequest);
 
     int receiveGoods(Long id);
-
-    void changeUserOrderStatus(Long id);
-
-    UserOrder getAdminOrderById(Long adminOrderId);
 }

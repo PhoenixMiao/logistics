@@ -65,17 +65,4 @@ public class UserOrderServiceImpl implements UserOrderService {
         return 1;
     }
 
-    @Override
-    public void changeUserOrderStatus(Long id){
-        UserOrder userOrder = userOrderMapper.getUserOrderById(id);
-        AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
-        userOrderMapper.changStatus(adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),id);
-    }
-
-    @Override
-    public UserOrder getAdminOrderById(Long id){
-        UserOrder userOrder = userOrderMapper.getUserOrderById(id);
-        //AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
-        return userOrder;
-    }
 }
