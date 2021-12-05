@@ -58,7 +58,7 @@ public class AccountController {
             }
         }
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
-
+        principal.setUsername(username);
 
         return Result.success("登录成功", principal);
     }

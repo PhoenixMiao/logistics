@@ -4,7 +4,7 @@ package com.phoenix.logistics.util;
 public class DisTranUtil {
 
     private static final  double EARTH_RADIUS = 6378137;//赤道半径(单位m)
-    private static final  int SPEED = 80;//假设的货车运送速度(80km/h)
+    private static final  int SPEED = 8000;//假设的货车运送速度(8000km/h)
     /**
      * 转化为弧度(rad)
      * */

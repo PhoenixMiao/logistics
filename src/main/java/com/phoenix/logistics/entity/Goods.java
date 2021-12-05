@@ -1,5 +1,6 @@
 package com.phoenix.logistics.entity;
 
+import com.phoenix.logistics.enums.GoodsType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class Goods
     private String name;
 
     @ApiModelProperty("种类")
-    private Integer type;
+    private GoodsType type;
 
     @ApiModelProperty("体积")
     private Double volume;
@@ -34,4 +35,12 @@ public class Goods
 
     @ApiModelProperty("价值")
     private Double value;
+
+    public Goods(String name, GoodsType type, Double volume, Double weight, Double value) {
+        this.name = name;
+        this.type = type;
+        this.volume = volume;
+        this.weight = weight;
+        this.value = value;
+    }
 }
