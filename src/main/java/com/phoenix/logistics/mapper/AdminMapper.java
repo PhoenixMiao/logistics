@@ -17,10 +17,10 @@ import java.util.List;
 @Repository
 public interface AdminMapper extends MyMapper<User> {
 
-    @Insert("INSERT INTO admin(user_name,user_password) VALUES(#{user_name},#{user_password})")
+    @Insert("INSERT INTO admin(userName,userPassword) VALUES(#{userName},#{userPassword})")
     int insertAdmin(Admin admin);
 
-    @Select("SELECT * FROM admin WHERE user_name=#{user_name}")
+    @Select("SELECT * FROM admin WHERE userName=#{userName}")
     Admin getAdminByUsername(String username);
 
     @Select("SELECT * FROM admin")
