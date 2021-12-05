@@ -17,16 +17,7 @@ import java.util.List;
 @Repository
 public interface AdminMapper extends MyMapper<User> {
 
-    @Insert("INSERT INTO admin(userName,userPassword) VALUES(#{userName},#{userPassword})")
-    int insertAdmin(Admin admin);
-
     @Select("SELECT * FROM admin WHERE userName=#{userName}")
     Admin getAdminByUsername(String username);
 
-    @Select("SELECT * FROM admin")
-    List<Admin> getAdminAll();
-
-    //删除管理员
-    @Delete("DELETE FROM admin WHERE id=#{id}")
-    int deleteAdmin(Integer id);
 }

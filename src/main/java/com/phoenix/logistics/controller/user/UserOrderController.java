@@ -32,13 +32,6 @@ public class UserOrderController {
         return Result.success("提交成功",data);
     }
 
-    @GetMapping("/status")
-    @ApiOperation("修改用户订单状态（请一定在调用管理员的处理订单接口后立即调用）")
-    @ApiImplicitParam(name = "id",value = "刚刚发货的用户订单的id",paramType = "query",dataType = "Long")
-    public Result changeUserOrderStatus(@NotNull@RequestParam(value = "id")Long id){
-        UserOrder userOrder = userOrderService.getAdminOrderById(id);
-        return Result.success("修改成功！！",userOrder);
-    }
 
     @RequiresRoles("user")
     @PostMapping("/receive")
