@@ -6,9 +6,7 @@ import com.phoenix.logistics.entity.AdminOrder;
 import com.phoenix.logistics.entity.Goods;
 import com.phoenix.logistics.entity.UserOrder;
 import com.phoenix.logistics.enums.GoodsType;
-import com.phoenix.logistics.mapper.AdminOrderMapper;
-import com.phoenix.logistics.mapper.GoodsMapper;
-import com.phoenix.logistics.mapper.UserOrderMapper;
+import com.phoenix.logistics.mapper.*;
 import com.phoenix.logistics.service.user.UserOrderService;
 import com.phoenix.logistics.util.DatesUtil;
 import com.phoenix.logistics.util.DisTranUtil;
@@ -41,7 +39,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         GoodsType goodsType = GoodsType.valueOf(submitUserOrderRequest.getGoodsType());
         Goods goods = new Goods(submitUserOrderRequest.getGoodsName(),goodsType,submitUserOrderRequest.getGoodsVolume(),submitUserOrderRequest.getGoodsWeight(),submitUserOrderRequest.getGoodsValue());
         goodsMapper.addGoods(goods);
-        UserOrder userOrder = new UserOrder(submitUserOrderRequest.getSenderUsername(),submitUserOrderRequest.getReceiverUsername(),goods.getId(),0,currentTime,submitUserOrderRequest.getOriginLocation(),submitUserOrderRequest.getDestinationLocation(),currentTime,tranTime,new Long(0));
+        UserOrder userOrder = new UserOrder(submitUserOrderRequest.getSenderUsername(),submitUserOrderRequest.getReceiverUsername(),goods.getId(),0,currentTime,submitUserOrderRequest.getOriginLocation(),submitUserOrderRequest.getDestinationLocation(),currentTime,tranTime);
         userOrderMapper.submitUserOrder(userOrder);
         AdminOrder adminOrder = new AdminOrder(userOrder.getId(),goods.getId(),0,currentTime,tranTime);
         adminOrderMapper.newAdminOrder(adminOrder);
@@ -65,5 +63,19 @@ public class UserOrderServiceImpl implements UserOrderService {
         if(adminOrder.getStatus()!=2) return 0;
         adminOrderMapper.changeStatus(3,currentTime,adminOrder.getId());
         return 1;
+    }
+
+    @Override
+    public void changeUserOrderStatus(Long id){
+        UserOrder userOrder = userOrderMapper.getUserOrderById(id);
+        AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
+        userOrderMapper.changStatus(adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),id);
+    }
+
+    @Override
+    public UserOrder getAdminOrderById(Long id){
+        UserOrder userOrder = userOrderMapper.getUserOrderById(id);
+        //AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
+        return userOrder;
     }
 }

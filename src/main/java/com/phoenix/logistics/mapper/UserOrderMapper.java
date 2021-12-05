@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserOrderMapper extends MyMapper<UserOrder>{
-    @Insert("INSERT INTO user_order(sender_username,receiver_username,goods_id,status,status_update_time,origin_location,destination_location,commit_time,transport_time,admin_order_id) VALUES (#{senderUsername},#{receiverUsername},#{goodsId},#{status},#{statusUpdateTime},#{originLocation},#{destinationLocation},#{commitTime},#{transportTime},#{adminOrderId})")
+    @Insert("INSERT INTO user_order(sender_username,receiver_username,goods_id,status,status_update_time,origin_location,destination_location,commit_time,transport_time) VALUES (#{senderUsername},#{receiverUsername},#{goodsId},#{status},#{statusUpdateTime},#{originLocation},#{destinationLocation},#{commitTime},#{transportTime})")
     @Options(useGeneratedKeys=true, keyProperty="id")
     void submitUserOrder(UserOrder userOrder);
 
