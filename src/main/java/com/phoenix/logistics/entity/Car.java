@@ -20,5 +20,5 @@ public class Car {
     private Long id;
 
     @ApiModelProperty("状态")
-    private String name;
+    private Integer status;
 }

@@ -15,15 +15,6 @@ import java.util.List;
 @Service
 public class CarServiceImpl implements CarService {
 
-    /**
-     * 用户登录统计命名规则
-     * key格式：{项目名}:USERLOGIN:{日期}
-     * value：当日用户登录数
-     * 例如：2020-12-20当天有28个用户登录
-     * key为：STELL:USERLOGIN:2020-12-20
-     * value为：28
-     */
-
 
     @Autowired
     CarMapper carMapper;
@@ -44,6 +35,14 @@ public class CarServiceImpl implements CarService {
         for(int i = 0;i<num;i++){
             carMapper.insertCar(0);
         }
+    }
+
+    @Override
+    public int deleteCar(Long id){
+        Car car = carMapper.getCarById(id);
+        if(car.getStatus()==1) return 1;
+        carMapper.deleteCar(id);
+        return 0;
     }
 
 }

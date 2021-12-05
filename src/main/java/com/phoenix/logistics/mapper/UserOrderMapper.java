@@ -4,12 +4,21 @@ import com.phoenix.logistics.MyMapper;
 import com.phoenix.logistics.entity.User;
 import com.phoenix.logistics.entity.UserOrder;
 import io.swagger.models.auth.In;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserOrderMapper extends MyMapper<UserOrder>{
-    @Insert("INSERT INTO user_order VALUES (null,#{sender_username},#{receiver_username},#{status},#{origin_location},#{destination_location},#{commit_time},null,#{transport_time})")
-    int submitUserOrder(@Param("sender_username")String sender_username,@Param("receiver_username")String receiver_username,@Param("status")Integer status,@Param("origin_location")String origin_location,@Param("destination_location")String destination_location,@Param("commit_time")String commit_time,@Param("transport_time") Integer transport_time);
+    @Insert("INSERT INTO user_order(sender_username,receiver_username,goods_id,status,status_update_time,origin_location,destination_location,commit_time,transport_time,admin_order_id) VALUES (#{senderUsername},#{receiverUsername},#{goodsId},#{status},#{statusUpdateTime},#{originLocation},#{destinationLocation},#{commitTime},#{transportTime},#{adminOrderId})")
+    @Options(useGeneratedKeys=true, keyProperty="id")
+    void submitUserOrder(UserOrder userOrder);
+
+    @Update("UPDATE user_order SET status=#{status},status_update_time=#{statusUpdateTime} WHERE id=#{id}")
+    void changStatus(@Param("status")Integer status,@Param("statusUpdateTime")String statusUpdateTime,@Param("id")Long id);
+
+    @Select("SELECT * FROM user_order WHERE id=#{id}")
+    UserOrder getUserOrderById(@Param("id")Long id);
+
+    @Update("UPDATE user_order SET admin_order_id=#{adminOrderId} WHERE id=#{id}")
+    void beDealed(@Param("adminOrderId")Long adminOrderId,@Param("id")Long id);
 }

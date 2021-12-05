@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import com.phoenix.logistics.MyMapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * user  generated at 2019-11-30 18:52:33 by: undestiny
  */
 
+@Repository
 public interface AdminMapper extends MyMapper<User> {
 
     @Insert("INSERT INTO admin(user_name,user_password) VALUES(#{user_name},#{user_password})")

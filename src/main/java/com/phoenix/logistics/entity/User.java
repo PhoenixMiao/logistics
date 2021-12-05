@@ -21,7 +21,7 @@ public class User
     @ApiModelProperty("用户id")
     private Long id;
 
-    @ApiModelProperty("用户名（字面量与id相同）")
+    @ApiModelProperty("用户名")
     private String userName;
 
     @ApiModelProperty("密码")

@@ -23,7 +23,7 @@ public class Swagger2Config {
                 .groupName("account")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.phoenix.controller.account"))//设定扫描范围
+                .apis(RequestHandlerSelectors.basePackage("com.phoenix.logistics.controller.account"))//设定扫描范围
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -34,7 +34,7 @@ public class Swagger2Config {
                 .groupName("admin")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("undestiny.stell.controller.admin"))//设定扫描范围
+                .apis(RequestHandlerSelectors.basePackage("com.phoenix.logistics.controller.admin"))//设定扫描范围
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -42,68 +42,14 @@ public class Swagger2Config {
     @Bean
     public Docket createCompanyApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("company")
+                .groupName("user")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("undestiny.stell.controller.company"))//设定扫描范围
+                .apis(RequestHandlerSelectors.basePackage("com.phoenix.logistics.controller.user"))//设定扫描范围
                 .paths(PathSelectors.any())
                 .build();
     }
 
-    @Bean
-    public Docket createHomepageApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("homepage")
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("undestiny.stell.controller.homepage"))//设定扫描范围
-                .paths(PathSelectors.any())
-                .build();
-    }
-
-    @Bean
-    public Docket createMemberApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("member")
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("undestiny.stell.controller.member"))//设定扫描范围
-                .paths(PathSelectors.any())
-                .build();
-    }
-
-    @Bean
-    public Docket createMessageApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("message")
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("undestiny.stell.controller.message"))//设定扫描范围
-                .paths(PathSelectors.any())
-                .build();
-    }
-
-    @Bean
-    public Docket createAlipayApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("alipay")
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("undestiny.stell.alipay"))//设定扫描范围
-                .paths(PathSelectors.any())
-                .build();
-    }
-
-    @Bean
-    public Docket createWxPayApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("wxpay")
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("undestiny.stell.wechat"))//设定扫描范围
-                .paths(PathSelectors.any())
-                .build();
-    }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
