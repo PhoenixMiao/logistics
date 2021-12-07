@@ -37,4 +37,5 @@ public interface AdminOrderMapper extends MyMapper<AdminOrder> {
 
     @Select("SELECT * FROM adminOrder WHERE status=#{status}")
     List<AdminOrder> getAdminOrderByStatus(@Param("status") Integer status);
+
 }

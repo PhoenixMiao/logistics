@@ -105,4 +105,35 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         }
     }
 
+    private Page<BriefAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize,int status){
+        updateTransportingAdminOrderStatus();
+        List<AdminOrder> AdminOrderArrayList = adminOrderMapper.getAdminOrderByStatus(status);
+        ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
+        for(AdminOrder adminOrder:AdminOrderArrayList){
+            UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
+            briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus()));
+        }
+        if(status==0) PageHelper.startPage(pageNum, pageSize,"statusUpdateTime asc");
+        else PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
+        return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
+    }
+    @Override
+    public Page<BriefAdminOrder> getBriefAdminUntreatedOrderList(int pageNum, int pageSize){
+       return getBriefAdminOrderListByStatus(pageNum,pageSize,0);
+    }
+
+    @Override
+    public Page<BriefAdminOrder> getBriefAdminTransportingOrderList(int pageNum, int pageSize){
+        return getBriefAdminOrderListByStatus(pageNum,pageSize,1);
+    }
+
+    @Override
+    public Page<BriefAdminOrder> getBriefAdminUnreceivedOrderList(int pageNum, int pageSize){
+        return getBriefAdminOrderListByStatus(pageNum,pageSize,2);
+    }
+
+    @Override
+    public Page<BriefAdminOrder> getBriefAdminReceivedOrderList(int pageNum, int pageSize){
+        return getBriefAdminOrderListByStatus(pageNum,pageSize,3);
+    }
 }

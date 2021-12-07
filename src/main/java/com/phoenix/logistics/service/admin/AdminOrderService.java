@@ -16,4 +16,12 @@ public interface AdminOrderService {
     OrderDetailResponse getOrderDetailResponse(Long adminOrderId);
 
     Page<BriefAdminOrder> getBriefAdminOrderList(int pageNum, int pageSize);
+
+    Page<BriefAdminOrder> getBriefAdminUntreatedOrderList(int pageNum, int pageSize);
+
+    Page<BriefAdminOrder> getBriefAdminTransportingOrderList(int pageNum, int pageSize);
+
+    Page<BriefAdminOrder> getBriefAdminUnreceivedOrderList(int pageNum, int pageSize);
+
+    Page<BriefAdminOrder> getBriefAdminReceivedOrderList(int pageNum, int pageSize);
 }

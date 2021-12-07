@@ -1,7 +1,10 @@
 package com.phoenix.logistics.service.user.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
+import com.phoenix.logistics.controller.response.BriefAdminOrder;
 import com.phoenix.logistics.controller.response.BriefUserOrder;
 import com.phoenix.logistics.dto.TmpUserOrder;
 import com.phoenix.logistics.entity.*;
@@ -88,15 +91,95 @@ public class UserOrderServiceImpl implements UserOrderService {
     }
 
     @Override
-    public Page<BriefUserOrder> getBriefUserOrderList(int pageNum, int pageSize,Long username){
-        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefUserOrderList();
+    public Page<BriefUserOrder> getBriefUserOrderList(int pageNum, int pageSize,String username){
+        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefUserOrderList(username);
         ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
         for(TmpUserOrder tmpUserOrder : tmpUserOrderList){
-            if(tmpUserOrder.getSenderUsername().equals(username)){
-                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus()));
-            }else{
+            briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus()));
+        }
+        return new Page<BriefUserOrder>(new PageInfo<>(briefUserOrderArrayList));
+    }
 
+    @Override
+    public Page<BriefUserOrder> getBriefUserSendOrderList(int pageNum, int pageSize,String username){
+        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefUserSendOrderList(username);
+        ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
+        for(TmpUserOrder tmpUserOrder : tmpUserOrderList){
+            briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus()));
+        }
+        return new Page<BriefUserOrder>(new PageInfo<>(briefUserOrderArrayList));
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserRecieveOrderList(int pageNum, int pageSize,String username){
+        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefReceiveUserOrderList(username);
+        ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
+        for(TmpUserOrder tmpUserOrder : tmpUserOrderList){
+            briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus()));
+        }
+        return new Page<BriefUserOrder>(new PageInfo<>(briefUserOrderArrayList));
+    }
+
+    private Page<BriefUserOrder> getBriefUserSendOrderListBystatus(int pageNum, int pageSize,String username,int status){
+        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefUserSendOrderList(username);
+        ArrayList<BriefUserOrder> briefSpecificUserOrderArrayList = new ArrayList<>();
+        for(TmpUserOrder tmpUserOrder:tmpUserOrderList){
+            if(tmpUserOrder.getStatus()==status){
+                briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus()));
             }
         }
+        PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
+        return new Page<BriefUserOrder>(new PageInfo<>(briefSpecificUserOrderArrayList));
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserSendAndUntreatedOrderList(int pageNum, int pageSize,String username){
+        return getBriefUserSendOrderListBystatus(pageNum,pageSize,username,0);
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserSendAndUTransportingOrderList(int pageNum, int pageSize,String username){
+        return getBriefUserSendOrderListBystatus(pageNum,pageSize,username,1);
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserSendAndUnrecievedOrderList(int pageNum, int pageSize,String username){
+        return getBriefUserSendOrderListBystatus(pageNum,pageSize,username,2);
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserSendAndRecievedOrderList(int pageNum, int pageSize,String username){
+        return getBriefUserSendOrderListBystatus(pageNum,pageSize,username,3);
+    }
+
+    private Page<BriefUserOrder> getBriefUserRecieveOrderListBystatus(int pageNum, int pageSize,String username,int status){
+        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefReceiveUserOrderList(username);
+        ArrayList<BriefUserOrder> briefSpecificUserOrderArrayList = new ArrayList<>();
+        for(TmpUserOrder tmpUserOrder:tmpUserOrderList){
+            if(tmpUserOrder.getStatus()==status){
+                briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus()));
+            }
+        }
+        return new Page<BriefUserOrder>(new PageInfo<>(briefSpecificUserOrderArrayList));
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserRecieveAndRecievedOrderList(int pageNum, int pageSize,String username){
+        return  getBriefUserRecieveOrderListBystatus(pageNum,pageSize,username,0);
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserRecieveAndUnrecievedOrderList(int pageNum, int pageSize,String username){
+        return  getBriefUserRecieveOrderListBystatus(pageNum,pageSize,username,1);
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserRecieveAndTransportingOrderList(int pageNum, int pageSize,String username){
+        return  getBriefUserRecieveOrderListBystatus(pageNum,pageSize,username,2);
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserRecieveAndUntreatedOrderList(int pageNum, int pageSize,String username){
+        return  getBriefUserRecieveOrderListBystatus(pageNum,pageSize,username,3);
     }
 }

@@ -15,5 +15,25 @@ public interface UserOrderService {
 
     UserOrder getUserOrderById(Long id);
 
-    Page<BriefUserOrder> getBriefUserOrderList(int pageNum, int pageSize,Long username);
+    Page<BriefUserOrder> getBriefUserOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserSendOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserRecieveOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserSendAndUntreatedOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserSendAndUTransportingOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserSendAndUnrecievedOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserSendAndRecievedOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserRecieveAndRecievedOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserRecieveAndUnrecievedOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserRecieveAndTransportingOrderList(int pageNum, int pageSize,String username);
+
+    Page<BriefUserOrder> getBriefUserRecieveAndUntreatedOrderList(int pageNum, int pageSize,String username);
 }
