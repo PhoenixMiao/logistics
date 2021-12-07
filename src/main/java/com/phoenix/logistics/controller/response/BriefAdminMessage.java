@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ApiModel("BriefAdminMessage 管理员信息列表")
 public class BriefAdminMessage {

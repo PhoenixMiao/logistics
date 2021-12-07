@@ -6,6 +6,8 @@ import com.phoenix.logistics.controller.response.OrderDetailResponse;
 import com.phoenix.logistics.entity.AdminOrder;
 import com.phoenix.logistics.entity.UserOrder;
 
+import javax.jws.soap.SOAPBinding;
+
 public interface AdminOrderService {
     void dealAdminOrder(Long id,Long carId,Long driverId,String adminUsername);
 

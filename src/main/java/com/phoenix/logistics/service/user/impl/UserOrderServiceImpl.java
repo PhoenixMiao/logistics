@@ -1,6 +1,9 @@
 package com.phoenix.logistics.service.user.impl;
 
+import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
+import com.phoenix.logistics.controller.response.BriefUserOrder;
+import com.phoenix.logistics.dto.TmpUserOrder;
 import com.phoenix.logistics.entity.*;
 import com.phoenix.logistics.enums.GoodsType;
 import com.phoenix.logistics.mapper.*;
@@ -12,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserOrderServiceImpl implements UserOrderService {
@@ -85,5 +85,18 @@ public class UserOrderServiceImpl implements UserOrderService {
             }
         }
 
+    }
+
+    @Override
+    public Page<BriefUserOrder> getBriefUserOrderList(int pageNum, int pageSize,Long username){
+        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefUserOrderList();
+        ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
+        for(TmpUserOrder tmpUserOrder : tmpUserOrderList){
+            if(tmpUserOrder.getSenderUsername().equals(username)){
+                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus()));
+            }else{
+
+            }
+        }
     }
 }

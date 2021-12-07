@@ -2,6 +2,7 @@ package com.phoenix.logistics.controller.admin;
 
 import com.phoenix.logistics.common.Result;
 import com.phoenix.logistics.dto.UserDTO;
+import com.phoenix.logistics.mapper.AdminOrderMapper;
 import com.phoenix.logistics.service.admin.AdminOrderService;
 import com.phoenix.logistics.service.user.UserOrderService;
 import io.swagger.annotations.Api;
@@ -23,6 +24,9 @@ import javax.validation.constraints.NotNull;
 public class AdminOrderController {
     @Autowired
     AdminOrderService adminOrderService;
+
+    @Autowired
+    AdminOrderMapper adminOrderMapper;
 
     @RequiresRoles("admin")
     @PostMapping("/deal")
@@ -46,7 +50,6 @@ public class AdminOrderController {
         return Result.success("获取成功",adminOrderService.getOrderDetailResponse(id));
     }
 
-    @RequiresRoles("admin")
     @GetMapping("/orderlist")
     @ApiOperation("获取管理员订单全部列表")
     @ApiImplicitParams({

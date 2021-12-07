@@ -81,11 +81,12 @@ public class AdminOrderServiceImpl implements AdminOrderService {
        List<TmpAdminOrder> tmpAdminOrderArrayList = adminOrderMapper.getBriefAdminOrderList();
        ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
        for(TmpAdminOrder tmpAdminOrder:tmpAdminOrderArrayList){
+           AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(tmpAdminOrder.getId());
            UserOrder userOrder = userOrderMapper.getUserOrderById(tmpAdminOrder.getUserOrderId());
-           briefAdminOrderArrayList.add(new BriefAdminOrder(tmpAdminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),tmpAdminOrder.getStatus()));
+           briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus()));
        }
        PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
-       return new Page<>(new PageInfo<>(briefAdminOrderArrayList));
+       return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
     }
 
     private void updateTransportingAdminOrderStatus(){
