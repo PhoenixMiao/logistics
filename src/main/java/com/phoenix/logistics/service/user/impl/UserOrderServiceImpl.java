@@ -1,10 +1,7 @@
 package com.phoenix.logistics.service.user.impl;
 
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
-import com.phoenix.logistics.entity.Admin;
-import com.phoenix.logistics.entity.AdminOrder;
-import com.phoenix.logistics.entity.Goods;
-import com.phoenix.logistics.entity.UserOrder;
+import com.phoenix.logistics.entity.*;
 import com.phoenix.logistics.enums.GoodsType;
 import com.phoenix.logistics.mapper.*;
 import com.phoenix.logistics.service.user.UserOrderService;
@@ -18,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class UserOrderServiceImpl implements UserOrderService {
@@ -31,7 +29,7 @@ public class UserOrderServiceImpl implements UserOrderService {
     private AdminOrderMapper adminOrderMapper;
 
     @Override
-    public HashMap<String,Long> submitUserOrder(SubmitUserOrderRequest submitUserOrderRequest){
+    public HashMap<String,Long> submitUserOrder(String username,SubmitUserOrderRequest submitUserOrderRequest){
         Integer tranTime = DisTranUtil.tranTime(submitUserOrderRequest.getOriginLng(),submitUserOrderRequest.getOriginLat(),submitUserOrderRequest.getDestinationLng(),submitUserOrderRequest.getDestinationLat());
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -39,9 +37,9 @@ public class UserOrderServiceImpl implements UserOrderService {
         GoodsType goodsType = GoodsType.valueOf(submitUserOrderRequest.getGoodsType());
         Goods goods = new Goods(submitUserOrderRequest.getGoodsName(),goodsType,submitUserOrderRequest.getGoodsVolume(),submitUserOrderRequest.getGoodsWeight(),submitUserOrderRequest.getGoodsValue());
         goodsMapper.addGoods(goods);
-        UserOrder userOrder = new UserOrder(submitUserOrderRequest.getSenderUsername(),submitUserOrderRequest.getReceiverUsername(),goods.getId(),0,currentTime,submitUserOrderRequest.getOriginLocation(),submitUserOrderRequest.getDestinationLocation(),currentTime,tranTime);
+        UserOrder userOrder = new UserOrder(username,submitUserOrderRequest.getReceiverUsername(),goods.getId(),0,currentTime,submitUserOrderRequest.getOriginLocation(),submitUserOrderRequest.getDestinationLocation(),currentTime,tranTime,0);
         userOrderMapper.submitUserOrder(userOrder);
-        AdminOrder adminOrder = new AdminOrder(userOrder.getId(),goods.getId(),0,currentTime,tranTime);
+        AdminOrder adminOrder = new AdminOrder(userOrder.getId(),goods.getId(),0,currentTime,tranTime,0);
         adminOrderMapper.newAdminOrder(adminOrder);
         userOrderMapper.beDealed(adminOrder.getId(),userOrder.getId());
         HashMap<String,Long> res = new HashMap<>();
@@ -65,4 +63,27 @@ public class UserOrderServiceImpl implements UserOrderService {
         return 1;
     }
 
+
+    @Override
+    public UserOrder getUserOrderById(Long id){
+        return userOrderMapper.getUserOrderById(id);
+    }
+
+
+    private void updateTransportingUserOrderStatus(String username){
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = simpleDateFormat.format(date);
+        List<UserOrder> userOrderList = userOrderMapper.getTransportingUserOrderByStatusAndUsername(1,username);
+        for(UserOrder userOrder:userOrderList){
+            AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
+            if(adminOrder.getArriveTime().compareTo(currentTime)<0){
+                userOrderMapper.changStatus(2,adminOrder.getArriveTime(),userOrder.getId());
+                if(adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId()).getStatus()==1){
+                    adminOrderMapper.changeStatus(2,adminOrder.getArriveTime(),adminOrder.getId());
+                }
+            }
+        }
+
+    }
 }

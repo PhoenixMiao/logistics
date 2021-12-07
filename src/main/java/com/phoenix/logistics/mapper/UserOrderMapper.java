@@ -7,6 +7,8 @@ import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserOrderMapper extends MyMapper<UserOrder>{
     @Insert("INSERT INTO userOrder(senderUsername,receiverUsername,goodsId,status,statusUpdateTime,originLocation,destinationLocation,commitTime,transportTime) VALUES (#{senderUsername},#{receiverUsername},#{goodsId},#{status},#{statusUpdateTime},#{originLocation},#{destinationLocation},#{commitTime},#{transportTime})")
@@ -21,4 +23,7 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
 
     @Update("UPDATE userOrder SET adminOrderId=#{adminOrderId} WHERE id=#{id}")
     void beDealed(@Param("adminOrderId")Long adminOrderId,@Param("id")Long id);
+
+    @Select("SELECT * FROM userOrder WHERE status=#{status} AND username=#{username}")
+    List<UserOrder> getTransportingUserOrderByStatusAndUsername(@Param("status")Integer status,@Param("username")String username);
 }

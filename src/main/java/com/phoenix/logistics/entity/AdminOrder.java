@@ -51,11 +51,15 @@ public class AdminOrder {
     @ApiModelProperty("送达时间")
     private String arriveTime;
 
-    public AdminOrder(Long userOrderId, Long goodsId, Integer status, String statusUpdateTime,Integer transportTime) {
+    @ApiModelProperty("是否已读")
+    private Integer isRead;
+
+    public AdminOrder(Long userOrderId, Long goodsId, Integer status, String statusUpdateTime,Integer transportTime,Integer isRead) {
         this.userOrderId = userOrderId;
         this.goodsId = goodsId;
         this.status = status;
         this.statusUpdateTime = statusUpdateTime;
         this.transportTime = transportTime;
+        this.isRead = isRead;
     }
 }

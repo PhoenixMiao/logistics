@@ -15,9 +15,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 @ApiModel("SubmitUserOrder 提交用户订单")
-public class SubmitUserOrderRequest {
-    @ApiModelProperty("发送人用户名")
-    private String senderUsername;
+public class SubmitUserOrderRequest{
 
     @ApiModelProperty("接受人用户名")
     private String receiverUsername;

@@ -13,4 +13,7 @@ public interface GoodsMapper extends MyMapper<Goods>{
     @Options(useGeneratedKeys=true, keyProperty="id")
     void addGoods(Goods good);
 
+    @Select("SELECT * FROM goods WHERE id=#{id}")
+    Goods getGoodsById(Long id);
+
 }

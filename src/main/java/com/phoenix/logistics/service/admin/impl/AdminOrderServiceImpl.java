@@ -1,12 +1,17 @@
 package com.phoenix.logistics.service.admin.impl;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.phoenix.logistics.common.Page;
+import com.phoenix.logistics.controller.response.BriefAdminOrder;
+import com.phoenix.logistics.controller.response.OrderDetailResponse;
+import com.phoenix.logistics.dto.TmpAdminOrder;
+import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.AdminOrder;
+import com.phoenix.logistics.entity.Goods;
 import com.phoenix.logistics.entity.UserOrder;
-import com.phoenix.logistics.mapper.AdminOrderMapper;
-import com.phoenix.logistics.mapper.CarMapper;
-import com.phoenix.logistics.mapper.DriverMapper;
-import com.phoenix.logistics.mapper.UserOrderMapper;
+import com.phoenix.logistics.mapper.*;
 import com.phoenix.logistics.service.admin.AdminOrderService;
 import com.phoenix.logistics.util.DisTranUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +19,10 @@ import org.springframework.stereotype.Service;
 
 import javax.jws.soap.SOAPBinding;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AdminOrderServiceImpl implements AdminOrderService {
@@ -31,6 +38,9 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     @Autowired
     DriverMapper driverMapper;
+
+    @Autowired
+    GoodsMapper goodsMapper;
 
     @Override
     public void dealAdminOrder(Long id,Long carId,Long driverId,String adminUsername){
@@ -53,22 +63,45 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
 
     @Override
-    public int goodsArrive(Long id){
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentTime = simpleDateFormat.format(date);
-        AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(id);
-        if(adminOrder.getStatus()==0) return 0;
-        adminOrderMapper.changeStatus(2,currentTime,id);
-        carMapper.allocateCar(0,adminOrder.getCarId());
-        driverMapper.allocateDriver(0,adminOrder.getDriverId());
-        userOrderMapper.changStatus(2,currentTime,adminOrder.getUserOrderId());
-        return 1;
+    public AdminOrder getAdminOrderById(Long id){
+        return adminOrderMapper.getAdminOrderById(id);
     }
 
     @Override
-    public AdminOrder getAdminOrderById(Long id){
-        return adminOrderMapper.getAdminOrderById(id);
+    public OrderDetailResponse getOrderDetailResponse(Long adminOrderId){
+        AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(adminOrderId);
+        UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
+        Goods goods = goodsMapper.getGoodsById(userOrder.getGoodsId());
+        return new OrderDetailResponse(goods.getId(),goods.getName(),goods.getType(),goods.getVolume(),goods.getWeight(),goods.getValue(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),userOrder.getStatus(),userOrder.getStatusUpdateTime(),userOrder.getOriginLocation(),userOrder.getDestinationLocation(),userOrder.getCommitTime(),userOrder.getReceiveTime(),adminOrder.getCarId(),adminOrder.getDriverId(),adminOrder.getAdminUsername(),adminOrder.getTransportTime(),adminOrder.getSendTime(),adminOrder.getArriveTime());
+    }
+
+    @Override
+    public Page<BriefAdminOrder> getBriefAdminOrderList(int pageNum, int pageSize){
+        updateTransportingAdminOrderStatus();
+       List<TmpAdminOrder> tmpAdminOrderArrayList = adminOrderMapper.getBriefAdminOrderList();
+       ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
+       for(TmpAdminOrder tmpAdminOrder:tmpAdminOrderArrayList){
+           UserOrder userOrder = userOrderMapper.getUserOrderById(tmpAdminOrder.getUserOrderId());
+           briefAdminOrderArrayList.add(new BriefAdminOrder(tmpAdminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),tmpAdminOrder.getStatus()));
+       }
+       PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
+       return new Page<>(new PageInfo<>(briefAdminOrderArrayList));
+    }
+
+    private void updateTransportingAdminOrderStatus(){
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = simpleDateFormat.format(date);
+        List<AdminOrder> adminOrderList = adminOrderMapper.getAdminOrderByStatus(1);
+        for(AdminOrder adminOrder:adminOrderList){
+            if(adminOrder.getArriveTime().compareTo(currentTime)<0){
+                adminOrderMapper.changeStatus(2,adminOrder.getArriveTime(),adminOrder.getId());
+                carMapper.allocateCar(0,adminOrder.getCarId());
+                driverMapper.allocateDriver(0,adminOrder.getDriverId());
+                if(userOrderMapper.getUserOrderById(adminOrder.getUserOrderId()).getStatus()==1)
+                    userOrderMapper.changStatus(2,adminOrder.getArriveTime(),adminOrder.getUserOrderId());
+            }
+        }
     }
 
 }
