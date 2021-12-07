@@ -62,20 +62,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/orderlist")
-    @ApiOperation("获取用户订单全部列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
-            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
-    public Result getBriefOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
-                                    @NotNull @RequestParam("pageNum")Integer pageNum){
-        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
-        String username = principal.getUsername();
-        return Result.success(userOrderService.getBriefUserOrderList(pageNum,pageSize,username));
-    }
-
-    @RequiresRoles("user")
-    @GetMapping("/sendorderlist")
+    @GetMapping("/all_send_list")
     @ApiOperation("获取用户发送的订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -88,7 +75,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/recieveorderlist")
+    @GetMapping("/all_receive_list")
     @ApiOperation("获取用户接收的订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -101,7 +88,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/sendandutlist")
+    @GetMapping("/submitted_send_tlist")
     @ApiOperation("获取用户发送的未处理订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -114,7 +101,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/sendandtrlist")
+    @GetMapping("/transporting_send_list")
     @ApiOperation("获取用户发送的运输中订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -127,7 +114,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/sendandurlist")
+    @GetMapping("/unreceived_send_list")
     @ApiOperation("获取用户发送的待收货订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -140,7 +127,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/sendandrelist")
+    @GetMapping("/received_send_list")
     @ApiOperation("获取用户发送的已收货订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -153,7 +140,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/recieveandutlist")
+    @GetMapping("/submitted_receive_list")
     @ApiOperation("获取用户接收的未处理订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -166,7 +153,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/recieveandtrlist")
+    @GetMapping("/transporting_receive_list")
     @ApiOperation("获取用户接收的运输中订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -179,7 +166,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/recieveandurlist")
+    @GetMapping("/unreceived_receive_list")
     @ApiOperation("获取用户接收的待收货订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -192,7 +179,7 @@ public class UserOrderController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/recieveandrelist")
+    @GetMapping("/received_receive_list")
     @ApiOperation("获取用户接收的已收货订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -202,5 +189,14 @@ public class UserOrderController {
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
         return Result.success(userOrderService.getBriefUserRecieveAndRecievedOrderList(pageNum,pageSize,username));
+    }
+
+    @RequiresRoles("user")
+    @GetMapping("/message")
+    @ApiOperation("获取用户信息列表")
+    public Result getUserMessageList(){
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        String username = principal.getUsername();
+        return Result.success(userOrderService.getUserMessageList(username));
     }
 }

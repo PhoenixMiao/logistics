@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Builder
 @ApiModel("BriefUserOrder 用户订单列表")
 public class BriefUserOrder implements Serializable {
-    @ApiModelProperty("管理员订单编号")
+    @ApiModelProperty("用户订单编号")
     private Long adminOrderId;
 
     @ApiModelProperty("相关人用户名")

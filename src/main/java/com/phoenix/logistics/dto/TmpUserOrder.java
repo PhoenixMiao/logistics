@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class TmpUserOrder implements Serializable {
-    private Long Id;
+    private Long id;
     private String senderUsername;
     private String receiverUsername;
     private Integer status;

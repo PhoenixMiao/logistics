@@ -51,7 +51,7 @@ public class AdminOrderController {
     }
 
     @RequiresRoles("admin")
-    @GetMapping("/orderlist")
+    @GetMapping("/all_list")
     @ApiOperation("获取管理员订单全部列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -62,7 +62,7 @@ public class AdminOrderController {
     }
 
     @RequiresRoles("admin")
-    @GetMapping("/untreatedorderlist")
+    @GetMapping("/undealed_list")
     @ApiOperation("获取管理员未处理订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -73,7 +73,7 @@ public class AdminOrderController {
     }
 
     @RequiresRoles("admin")
-    @GetMapping("/transportingorderlist")
+    @GetMapping("/transporting_list")
     @ApiOperation("获取管理员运输中订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -84,7 +84,7 @@ public class AdminOrderController {
     }
 
     @RequiresRoles("admin")
-    @GetMapping("/unreceivedorderlist")
+    @GetMapping("/unreceived_list")
     @ApiOperation("获取管理员待收货订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -95,7 +95,7 @@ public class AdminOrderController {
     }
 
     @RequiresRoles("admin")
-    @GetMapping("/receivedorderlist")
+    @GetMapping("/received_list")
     @ApiOperation("获取管理员已收货订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
@@ -103,6 +103,13 @@ public class AdminOrderController {
     public Result getBriefRecievedOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
                                               @NotNull @RequestParam("pageNum")Integer pageNum){
         return Result.success(adminOrderService.getBriefAdminReceivedOrderList(pageNum,pageSize));
+    }
+
+    @RequiresRoles("admin")
+    @GetMapping("/message")
+    @ApiOperation("获取管理员信息列表")
+    public Result getAdminMessageList(){
+        return Result.success("获取成功",adminOrderService.getAdminMessageList());
     }
 
 }

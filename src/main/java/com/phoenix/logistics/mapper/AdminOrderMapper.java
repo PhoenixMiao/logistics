@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 public interface AdminOrderMapper extends MyMapper<AdminOrder> {
-    @Insert("INSERT INTO adminOrder(userOrderId,goodsId,transportTime,status,statusUpdateTime) VALUES (#{userOrderId},#{goodsId},#{transportTime},#{status},#{statusUpdateTime})")
+    @Insert("INSERT INTO adminOrder(userOrderId,goodsId,transportTime,status,statusUpdateTime,isRead) VALUES (#{userOrderId},#{goodsId},#{transportTime},#{status},#{statusUpdateTime},#{isRead})")
     @Options(useGeneratedKeys=true, keyProperty="id")
     int newAdminOrder(AdminOrder adminOrder);
 
@@ -32,10 +32,15 @@ public interface AdminOrderMapper extends MyMapper<AdminOrder> {
     @Select("SELECT * FROM adminOrder WHERE id=#{id}")
     AdminOrder getAdminOrderById(@Param("id") Long id);
 
-    @Select("SELECT id,userOrderId,status,statusUpdateTime,isRead FROM adminOrder")
+    @Select("SELECT id,userOrderId,status,statusUpdateTime FROM adminOrder")
     List<TmpAdminOrder> getBriefAdminOrderList();
 
     @Select("SELECT * FROM adminOrder WHERE status=#{status}")
     List<AdminOrder> getAdminOrderByStatus(@Param("status") Integer status);
 
+    @Update("UPDATE adminOrder SET isRead=#{isRead} WHERE id=#{id}")
+    void readAdminOrder(@Param("isRead")Integer isRead,@Param("id")Long id);
+
+    @Select("SELECT id,userOrderId,status,statusUpdateTime FROM adminOrder WHERE isRead=#{isRead}")
+    List<TmpAdminOrder> getAdminMessage(@Param("isRead")Integer isRead);
 }
