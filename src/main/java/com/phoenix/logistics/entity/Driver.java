@@ -8,13 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ApiModel("Driver 司机")
-public class Driver {
+public class Driver implements Serializable {
 
     @Id
     @ApiModelProperty("id")

@@ -8,12 +8,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ApiModel("OrderDetailResponse 订单详情的所有信息")
-public class OrderDetailResponse {
+public class OrderDetailResponse implements Serializable {
     @ApiModelProperty("货物id")
     private Long goodsId;
 

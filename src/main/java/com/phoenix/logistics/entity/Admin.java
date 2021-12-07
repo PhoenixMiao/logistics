@@ -7,15 +7,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.sf.saxon.functions.Serialize;
 
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ApiModel("Controller 管理员")
-public class Admin {
+public class Admin implements Serializable {
     @Id
     @ApiModelProperty("管理员id")
     private Long id;

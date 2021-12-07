@@ -9,13 +9,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ApiModel("ControllerOrder 管理员订单")
-public class AdminOrder {
+public class AdminOrder implements Serializable {
 
     @Id
     @ApiModelProperty("id")
