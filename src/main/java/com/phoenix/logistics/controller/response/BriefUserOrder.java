@@ -7,12 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ApiModel("BriefUserOrder 用户订单列表")
-public class BriefUserOrder {
+public class BriefUserOrder implements Serializable {
     @ApiModelProperty("管理员订单编号")
     private Long adminOrderId;
 

@@ -9,13 +9,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ApiModel("SubmitUserOrder 提交用户订单")
-public class SubmitUserOrderRequest{
+public class SubmitUserOrderRequest implements Serializable {
 
     @ApiModelProperty("接受人用户名")
     private String receiverUsername;

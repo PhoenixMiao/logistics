@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @Builder
-public class TmpAdminOrder {
+public class TmpAdminOrder implements Serializable {
     private Long id;
     private Long userOrderId;
     private Integer status;

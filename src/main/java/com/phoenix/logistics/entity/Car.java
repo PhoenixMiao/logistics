@@ -8,13 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ApiModel("Car 车辆")
-public class Car {
+public class Car implements Serializable {
     @Id
     @ApiModelProperty("id")
     private Long id;
