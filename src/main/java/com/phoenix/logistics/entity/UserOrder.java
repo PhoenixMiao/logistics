@@ -54,7 +54,10 @@ public class UserOrder {
     @ApiModelProperty("预计运送时间")
     private Integer transportTime;
 
-    public UserOrder(String senderUsername, String reciverUsername, Long goodsId, Integer status,String statusUpdateTime, String originLocation, String destinationLocation, String commitTime, Integer transportTime) {
+    @ApiModelProperty("是否已读")
+    private Integer isRead;
+
+    public UserOrder(String senderUsername, String reciverUsername, Long goodsId, Integer status,String statusUpdateTime, String originLocation, String destinationLocation, String commitTime, Integer transportTime,Integer isRead) {
         this.senderUsername = senderUsername;
         this.receiverUsername = reciverUsername;
         this.goodsId = goodsId;
@@ -64,5 +67,6 @@ public class UserOrder {
         this.destinationLocation = destinationLocation;
         this.commitTime = commitTime;
         this.transportTime = transportTime;
+        this.isRead = isRead;
     }
 }

@@ -38,20 +38,23 @@ public class AdminOrderController {
         return Result.success("分配成功");
     }
 
-    @PostMapping("/arrive")
-    @ApiOperation("货物送到了")
-    @ApiImplicitParam(name="id",value = "送达的管理员订单id",required = true,paramType = "query",dataType = "Long")
-    public Result goodsArrive(@NotNull@RequestParam("id")Long id){
-        if(adminOrderService.goodsArrive(id)==0) return Result.fail("货物尚未处理");
-        return Result.success("货物已到达");
+    @RequiresRoles("admin")
+    @GetMapping("/detail")
+    @ApiOperation("根据adminOrderId获取订单详情")
+    @ApiImplicitParam(name = "id", value = "管理员订单id", required = true, paramType = "query", dataType = "Long")
+    public Result detail(@NotNull@RequestParam("id")Long id){
+        return Result.success("获取成功",adminOrderService.getOrderDetailResponse(id));
     }
 
-    @GetMapping("/{id}")
-    @ApiOperation("通过id获取订单详情")
-    public Result getAdminOrderById(@PathVariable("id")Long id){
-        return Result.success("获取成功！！",adminOrderService.getAdminOrderById(id));
+    @RequiresRoles("admin")
+    @GetMapping("/orderlist")
+    @ApiOperation("获取管理员订单全部列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
+            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
+    public Result getBriefOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
+                             @NotNull @RequestParam("pageNum")Integer pageNum){
+        return Result.success(adminOrderService.getBriefAdminOrderList(pageNum,pageSize));
     }
-
-
 
 }

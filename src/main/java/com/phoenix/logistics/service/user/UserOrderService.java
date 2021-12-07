@@ -7,7 +7,11 @@ import com.phoenix.logistics.entity.UserOrder;
 import java.util.HashMap;
 
 public interface UserOrderService {
-    HashMap<String,Long> submitUserOrder(SubmitUserOrderRequest submitUserOrderRequest);
+    HashMap<String,Long> submitUserOrder(String username,SubmitUserOrderRequest submitUserOrderRequest);
 
     int receiveGoods(Long id);
+
+    UserOrder getUserOrderById(Long id);
+
+
 }

@@ -40,12 +40,34 @@ public class Swagger2Config {
     }
 
     @Bean
-    public Docket createCompanyApi() {
+    public Docket createUserApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("user")
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.phoenix.logistics.controller.user"))//设定扫描范围
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Bean
+    public Docket createRequestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("request")
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.phoenix.logistics.controller.request"))//设定扫描范围
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Bean
+    public Docket createResponseApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("response")
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.phoenix.logistics.controller.response"))//设定扫描范围
                 .paths(PathSelectors.any())
                 .build();
     }
