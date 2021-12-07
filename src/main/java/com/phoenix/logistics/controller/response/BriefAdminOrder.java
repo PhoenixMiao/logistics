@@ -24,4 +24,7 @@ public class BriefAdminOrder {
 
     @ApiModelProperty("状态")
     private Integer status;
+
+    @ApiModelProperty("状态更新时间")
+    private String statusUpdateTime;
 }

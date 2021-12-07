@@ -30,7 +30,7 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
     @Select("SELECT * FROM userOrder WHERE status=#{status} AND username=#{username}")
     List<UserOrder> getTransportingUserOrderByStatusAndUsername(@Param("status")Integer status,@Param("username")String username);
 
-    @Select("SELECT id,senderUsername,receiverUsername,status FROM userOrder WHERE senderUsername=#{username} OR receiverUsername=#{username}")
+    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime FROM userOrder WHERE senderUsername=#{username} OR receiverUsername=#{username}")
     List<TmpUserOrder> getBriefUserOrderList(String username);
 
     @Select("SELECT id,senderUsername,receiverUsername,status FROM userOrder WHERE senderUsername=#{username}")

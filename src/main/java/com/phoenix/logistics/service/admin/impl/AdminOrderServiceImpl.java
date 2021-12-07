@@ -83,7 +83,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
        for(TmpAdminOrder tmpAdminOrder:tmpAdminOrderArrayList){
            AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(tmpAdminOrder.getId());
            UserOrder userOrder = userOrderMapper.getUserOrderById(tmpAdminOrder.getUserOrderId());
-           briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus()));
+           briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime()));
        }
        PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
        return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
@@ -111,10 +111,11 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
         for(AdminOrder adminOrder:AdminOrderArrayList){
             UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
-            briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus()));
+            briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime()));
         }
-        if(status==0) PageHelper.startPage(pageNum, pageSize,"statusUpdateTime asc");
+        if(status==0)PageHelper.startPage(pageNum, pageSize,"statusUpdateTime asc");
         else PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
+
         return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
     }
     @Override

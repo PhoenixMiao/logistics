@@ -13,4 +13,5 @@ public class TmpUserOrder {
     private String senderUsername;
     private String receiverUsername;
     private Integer status;
+    private String statusUpdateTime;
 }
