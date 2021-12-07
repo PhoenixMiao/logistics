@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ApiModel("BriefUserOrder 用户订单列表")
 public class BriefUserOrder {

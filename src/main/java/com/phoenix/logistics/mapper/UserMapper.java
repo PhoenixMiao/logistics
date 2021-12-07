@@ -1,6 +1,7 @@
 package com.phoenix.logistics.mapper;
 
 import com.phoenix.logistics.MyMapper;
+import com.phoenix.logistics.controller.response.BriefUserOrder;
 import com.phoenix.logistics.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
