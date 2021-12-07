@@ -55,10 +55,12 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         Date arriveDate = c.getTime();
         String arriveTime = simpleDateFormat.format(arriveDate);
         adminOrderMapper.DealAdminOrder(carId,driverId,adminUsername,1,currentTime,arriveTime,currentTime,id);
+        adminOrderMapper.readAdminOrder(0,id);
         carMapper.allocateCar(1,carId);
         driverMapper.allocateDriver(1,driverId);
         AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(id);
         userOrderMapper.changStatus(adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),adminOrder.getUserOrderId());
+        userOrderMapper.readUserOrder(0,adminOrder.getUserOrderId());
     }
 
 
@@ -72,6 +74,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(adminOrderId);
         UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
         Goods goods = goodsMapper.getGoodsById(userOrder.getGoodsId());
+        adminOrderMapper.readAdminOrder(1,adminOrder.getId());
+        userOrderMapper.readUserOrder(1,userOrder.getId());
         return new OrderDetailResponse(goods.getId(),goods.getName(),goods.getType(),goods.getVolume(),goods.getWeight(),goods.getValue(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),userOrder.getStatus(),userOrder.getStatusUpdateTime(),userOrder.getOriginLocation(),userOrder.getDestinationLocation(),userOrder.getCommitTime(),userOrder.getReceiveTime(),adminOrder.getCarId(),adminOrder.getDriverId(),adminOrder.getAdminUsername(),adminOrder.getTransportTime(),adminOrder.getSendTime(),adminOrder.getArriveTime());
     }
 
@@ -97,10 +101,12 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         for(AdminOrder adminOrder:adminOrderList){
             if(adminOrder.getArriveTime().compareTo(currentTime)<0){
                 adminOrderMapper.changeStatus(2,adminOrder.getArriveTime(),adminOrder.getId());
+                adminOrderMapper.readAdminOrder(0,adminOrder.getId());
                 carMapper.allocateCar(0,adminOrder.getCarId());
                 driverMapper.allocateDriver(0,adminOrder.getDriverId());
                 if(userOrderMapper.getUserOrderById(adminOrder.getUserOrderId()).getStatus()==1)
                     userOrderMapper.changStatus(2,adminOrder.getArriveTime(),adminOrder.getUserOrderId());
+                    userOrderMapper.readUserOrder(0,adminOrder.getUserOrderId());
             }
         }
     }
@@ -138,5 +144,16 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     @Override
     public Page<BriefAdminOrder> getBriefAdminReceivedOrderList(int pageNum, int pageSize){
         return getBriefAdminOrderListByStatus(pageNum,pageSize,3);
+    }
+
+    @Override
+    public List<BriefAdminOrder> getAdminMessageList(){
+        List<TmpAdminOrder> tmpAdminOrderList = adminOrderMapper.getAdminMessage(0);
+        ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
+        for(TmpAdminOrder tmpAdminOrder:tmpAdminOrderList){
+            UserOrder userOrder = userOrderMapper.getUserOrderById(tmpAdminOrder.getUserOrderId());
+            briefAdminOrderArrayList.add(new BriefAdminOrder(tmpAdminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),tmpAdminOrder.getStatus(),tmpAdminOrder.getStatusUpdateTime()));
+        }
+        return briefAdminOrderArrayList;
     }
 }

@@ -7,6 +7,7 @@ import com.phoenix.logistics.entity.UserOrder;
 import com.phoenix.logistics.entity.UserOrder;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface UserOrderService {
     HashMap<String,Long> submitUserOrder(String username,SubmitUserOrderRequest submitUserOrderRequest);
@@ -36,4 +37,6 @@ public interface UserOrderService {
     Page<BriefUserOrder> getBriefUserRecieveAndTransportingOrderList(int pageNum, int pageSize,String username);
 
     Page<BriefUserOrder> getBriefUserRecieveAndUntreatedOrderList(int pageNum, int pageSize,String username);
+
+    List<BriefUserOrder> getUserMessageList(String username);
 }

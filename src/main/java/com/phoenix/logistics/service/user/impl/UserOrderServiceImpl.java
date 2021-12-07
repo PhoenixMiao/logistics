@@ -60,9 +60,11 @@ public class UserOrderServiceImpl implements UserOrderService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentTime = simpleDateFormat.format(date);
         userOrderMapper.changStatus(3,currentTime,id);
+        userOrderMapper.readUserOrder(0,id);
         AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
         if(adminOrder.getStatus()!=2) return 0;
         adminOrderMapper.changeStatus(3,currentTime,adminOrder.getId());
+        adminOrderMapper.readAdminOrder(0, adminOrder.getId());
         return 1;
     }
 
@@ -82,8 +84,10 @@ public class UserOrderServiceImpl implements UserOrderService {
             AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
             if(adminOrder.getArriveTime().compareTo(currentTime)<0){
                 userOrderMapper.changStatus(2,adminOrder.getArriveTime(),userOrder.getId());
+                userOrderMapper.readUserOrder(0, userOrder.getId());
                 if(adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId()).getStatus()==1){
                     adminOrderMapper.changeStatus(2,adminOrder.getArriveTime(),adminOrder.getId());
+                    userOrderMapper.readUserOrder(0, adminOrder.getId());
                 }
             }
         }
@@ -190,6 +194,20 @@ public class UserOrderServiceImpl implements UserOrderService {
 
     @Override
     public Page<BriefUserOrder> getBriefUserRecieveAndUntreatedOrderList(int pageNum, int pageSize,String username){
-        return  getBriefUserRecieveOrderListBystatus(pageNum,pageSize,username,3);
+        return getBriefUserRecieveOrderListBystatus(pageNum,pageSize,username,3);
+    }
+
+    @Override
+    public List<BriefUserOrder> getUserMessageList(String username){
+        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getUserMessage(0,username);
+        ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
+        for(TmpUserOrder tmpUserOrder:tmpUserOrderList){
+            if(tmpUserOrder.getSenderUsername().equals(username)){
+                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime()));
+            }else{
+                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getSenderUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime()));
+            }
+        }
+        return briefUserOrderArrayList;
     }
 }
