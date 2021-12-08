@@ -1,5 +1,4 @@
-package com.phoenix.logistics.entity;
-
+package com.phoenix.logistics.controller.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,26 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Id;
-import java.io.Serializable;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@ApiModel("User 用户")
-public class User implements Serializable
-{
-    @Id
-    @ApiModelProperty("用户id")
-    private Long id;
-
-    @ApiModelProperty("用户名")
-    private String username;
-
-    @ApiModelProperty("密码")
-    private String password;
-
+@ApiModel("UpdateUserMessageRequest 修改用户信息")
+public class UpdateUserMessageRequest {
     @ApiModelProperty("性别")
     private Integer gender;
 
@@ -36,4 +21,5 @@ public class User implements Serializable
 
     @ApiModelProperty("居住地")
     private String residence;
+
 }

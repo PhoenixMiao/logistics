@@ -27,7 +27,4 @@ public class Admin implements Serializable {
 
     @ApiModelProperty("密码")
     private String password;
-
-    @ApiModelProperty("创建时间")
-    private String createTime;
 }

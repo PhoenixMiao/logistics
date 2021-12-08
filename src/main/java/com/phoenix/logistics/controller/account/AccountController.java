@@ -1,12 +1,15 @@
 package com.phoenix.logistics.controller.account;
 
-import com.phoenix.logistics.service.account.SignUpService;
+import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
+import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
+import com.phoenix.logistics.service.account.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +18,7 @@ import com.phoenix.logistics.common.Result;
 import com.phoenix.logistics.dto.UserDTO;
 import com.phoenix.logistics.util.PasswordUtil;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
@@ -61,7 +65,7 @@ public class AccountController {
     }
 
     @Autowired
-    public SignUpService signUpService;
+    public AccountService accountService;
 
     @PostMapping("/signUp")
     @ApiOperation("注册")
@@ -70,7 +74,7 @@ public class AccountController {
             @ApiImplicitParam(name = "password", value = "密码（6到20位）", required = true, paramType = "query", dataType = "String")})
     public Result signUp(@NotNull @Size(max = 20,min = 3) @RequestParam("username")String username,
                          @NotNull @Size(max = 20,min = 6) @RequestParam("password")String password){
-        signUpService.signUp(username,password);
+        accountService.signUp(username,password);
         return Result.success("注册成功!");
     }
 
@@ -82,4 +86,26 @@ public class AccountController {
         return Result.success(null);
     }
 
+    @PostMapping("/changePassword")
+    @ApiOperation("修改密码")
+    @ApiImplicitParam(name = "password", value = "密码（6到20位）", required = true, paramType = "query", dataType = "String")
+    public Result changePassword(@NotNull @Size(max = 20,min = 6) @RequestParam("password")String password){
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        String username = principal.getUsername();
+        if(accountService.changePassword(username,password)==-1){
+            return Result.fail("新密码不能和旧密码一样！");
+        }
+        return Result.success("修改成功！");
+    }
+
+
+    @RequiresRoles("user")
+    @PostMapping("/changeMessage")
+    @ApiOperation("修改用户个人信息")
+    public Result changeUserMessage(@NotNull @Valid @RequestBody UpdateUserMessageRequest updateUserMessageRequest){
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        String username = principal.getUsername();
+        accountService.updateUserMessage(username,updateUserMessageRequest);
+        return Result.success("修改成功");
+    }
 }
