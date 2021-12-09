@@ -2,6 +2,7 @@ package com.phoenix.logistics.controller.account;
 
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
 import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
+import com.phoenix.logistics.entity.User;
 import com.phoenix.logistics.service.account.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -58,10 +59,8 @@ public class AccountController {
                 return Result.fail("用户认证失败");
             }
         }
-        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
-        principal.setUsername(username);
 
-        return Result.success("登录成功", principal);
+        return Result.success("登录成功", accountService.getUser(username));
     }
 
     @Autowired
@@ -107,5 +106,22 @@ public class AccountController {
         String username = principal.getUsername();
         accountService.updateUserMessage(username,updateUserMessageRequest);
         return Result.success("修改成功");
+    }
+
+    @GetMapping("/check")
+    @ApiOperation("检验用户名是否重复")
+    public Result checkUsername(@NotNull @RequestParam("username")String username){
+        if(accountService.checkUsername(username)) return Result.success("可以注册");
+        else return Result.fail("用户名重复了，请换一个用户名");
+    }
+
+    @RequiresRoles("user")
+    @GetMapping("/all")
+    @ApiOperation("获取一个用户的所有信息")
+    public Result getUser(){
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        String username = principal.getUsername();
+        User user = accountService.getUser(username);
+        return Result.success("获取成功",user);
     }
 }

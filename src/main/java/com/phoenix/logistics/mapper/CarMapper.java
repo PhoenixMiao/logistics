@@ -27,4 +27,6 @@ public interface CarMapper extends MyMapper<Car> {
     @Update("UPDATE car SET status=#{status} WHERE id=#{id}")
     void allocateCar(@Param("status")Integer status,@Param("id")Long id);
 
+    @Select("SELECT * FROM car WHERE status=#{status}")
+    List<Car> getAllFreeCars(@Param("status")Integer status);
 }

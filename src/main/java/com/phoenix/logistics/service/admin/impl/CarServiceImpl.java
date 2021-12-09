@@ -45,4 +45,15 @@ public class CarServiceImpl implements CarService {
         return 0;
     }
 
+    @Override
+    public Page<Car> getAllFreeCars(int pageNum,int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        List<Car> carList = carMapper.getAllFreeCars(0);
+        return new Page<>(new PageInfo<>(carList));
+    }
+
+    @Override
+    public List<Car> getAllFreeCars(){
+        return carMapper.getAllFreeCars(0);
+    }
 }

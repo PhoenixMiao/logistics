@@ -1,5 +1,6 @@
 package com.phoenix.logistics.controller.admin;
 
+import com.phoenix.logistics.common.PageParam;
 import com.phoenix.logistics.common.Result;
 import com.phoenix.logistics.service.admin.CarService;
 import io.swagger.annotations.*;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -47,5 +49,13 @@ public class CarController {
         if(carService.deleteCar(id) == 1)
             return Result.fail("该车辆正在被使用，目前不能删除");
         else return Result.success("删除成功");
+    }
+
+    @RequiresRoles("admin")
+    @GetMapping("/free")
+    @ApiOperation("获取空闲车辆的列表")
+    public Result getAllFreeCars(@NotNull @Valid @RequestBody PageParam pageParam) {
+        if(pageParam.getPageNum()==null && pageParam.getPageSize()==null) return Result.success("获得成功",carService.getAllFreeCars());
+       return Result.success("获取成功",carService.getAllFreeCars(pageParam.getPageNum(), pageParam.getPageSize()));
     }
 }

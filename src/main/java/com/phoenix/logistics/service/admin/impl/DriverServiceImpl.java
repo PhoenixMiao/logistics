@@ -44,4 +44,16 @@ public class DriverServiceImpl implements DriverService {
         DriverMapper.deleteDriver(id);
         return 0;
     }
+
+    @Override
+    public Page<Driver> getAllFreeDrivers(int pageNum,int pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        List<Driver> driverList = DriverMapper.getAllFreeDrivers(0);
+        return new Page<>(new PageInfo<>(driverList));
+    }
+
+    @Override
+    public List<Driver> getAllFreeDrivers(){
+        return DriverMapper.getAllFreeDrivers(0);
+    }
 }
