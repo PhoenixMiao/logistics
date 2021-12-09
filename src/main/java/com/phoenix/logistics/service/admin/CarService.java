@@ -4,6 +4,8 @@ import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.Car;
 
+import java.util.List;
+
 
 public interface CarService {
 
@@ -13,4 +15,7 @@ public interface CarService {
 
     int deleteCar(Long id);
 
+    Page<Car> getAllFreeCars(int pageNum,int pageSize);
+
+    List<Car> getAllFreeCars();
 }

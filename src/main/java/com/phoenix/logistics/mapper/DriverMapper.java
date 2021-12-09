@@ -1,6 +1,7 @@
 package com.phoenix.logistics.mapper;
 
 import com.phoenix.logistics.entity.Admin;
+import com.phoenix.logistics.entity.Car;
 import com.phoenix.logistics.entity.Driver;
 import org.apache.ibatis.annotations.*;
 import com.phoenix.logistics.MyMapper;
@@ -23,4 +24,7 @@ public interface DriverMapper {
 
     @Update("UPDATE driver SET status=#{status} WHERE id=#{id}")
     void allocateDriver(@Param("status")Integer status,@Param("id")Long id);
+
+    @Select("SELECT * FROM driver WHERE status=#{status}")
+    List<Driver> getAllFreeDrivers(@Param("status")Integer status);
 }

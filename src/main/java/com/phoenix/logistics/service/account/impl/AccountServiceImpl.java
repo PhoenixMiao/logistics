@@ -58,4 +58,18 @@ public class AccountServiceImpl extends BaseService implements AccountService {
         if(updateUserMessageRequest.getResidence()!=null) userMapper.updateUserResidence(updateUserMessageRequest.getResidence(),username);
         if(updateUserMessageRequest.getTelephone()!=null) userMapper.updateUserTelephone(updateUserMessageRequest.getTelephone(),username);
     }
+
+    @Override
+    public boolean checkUsername(String username){
+        User user = userMapper.getUserByUsername(username);
+        if(user!=null){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public User getUser(String username){
+        return userMapper.getUserByUsername(username);
+    }
 }
