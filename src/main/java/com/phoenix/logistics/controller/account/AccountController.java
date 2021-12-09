@@ -2,6 +2,7 @@ package com.phoenix.logistics.controller.account;
 
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
 import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
+import com.phoenix.logistics.controller.response.GetUserResponse;
 import com.phoenix.logistics.entity.User;
 import com.phoenix.logistics.service.account.AccountService;
 import io.swagger.annotations.Api;
@@ -60,7 +61,8 @@ public class AccountController {
             }
         }
 
-        return Result.success("登录成功", accountService.getUser(username));
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        return Result.success("登录成功", new GetUserResponse(accountService.getUser(username),principal.getType()));
     }
 
     @Autowired
@@ -122,6 +124,6 @@ public class AccountController {
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
         User user = accountService.getUser(username);
-        return Result.success("获取成功",user);
+        return Result.success("获取成功",new GetUserResponse(user,principal.getType()));
     }
 }
