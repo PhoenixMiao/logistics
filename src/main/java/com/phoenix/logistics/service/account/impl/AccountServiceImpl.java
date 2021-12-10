@@ -72,4 +72,10 @@ public class AccountServiceImpl extends BaseService implements AccountService {
     public User getUser(String username){
         return userMapper.getUserByUsername(username);
     }
+
+    @Override
+    public boolean checkPassword(String username,String password){
+        if(userMapper.getPasswordByUsername(username).equals(password)) return false;
+        return true;
+    }
 }

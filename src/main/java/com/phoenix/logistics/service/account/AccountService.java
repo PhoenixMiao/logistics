@@ -11,6 +11,8 @@ public interface AccountService {
 
     int changePassword(String username,String password);
 
+    boolean checkPassword(String username,String password);
+
     void updateUserMessage(String username, UpdateUserMessageRequest updateUserMessageRequest);
 
     boolean checkUsername(String username);

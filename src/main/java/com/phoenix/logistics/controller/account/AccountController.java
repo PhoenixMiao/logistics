@@ -5,10 +5,7 @@ import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
 import com.phoenix.logistics.controller.response.GetUserResponse;
 import com.phoenix.logistics.entity.User;
 import com.phoenix.logistics.service.account.AccountService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -62,6 +59,7 @@ public class AccountController {
         }
 
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        if(principal.getType()==1) return Result.success("登录成功",principal);
         return Result.success("登录成功", new GetUserResponse(accountService.getUser(username),principal.getType()));
     }
 
@@ -99,6 +97,18 @@ public class AccountController {
         return Result.success("修改成功！");
     }
 
+    @GetMapping("/checkPassword")
+    @ApiOperation("判断密码是否相同")
+    @ApiImplicitParam(name = "password", value = "密码（6到20位）", required = true, paramType = "query", dataType = "String")
+    public Result checkPassword(@NotNull @Size(max = 20,min = 6) @RequestParam("password")String password){
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        String username = principal.getUsername();
+        if(!accountService.checkPassword(username,password)){
+            return Result.fail("新密码不能和旧密码一样！");
+        }
+        else return Result.success("新密码符合规范");
+    }
+
 
     @RequiresRoles("user")
     @PostMapping("/changeMessage")
@@ -110,7 +120,7 @@ public class AccountController {
         return Result.success("修改成功");
     }
 
-    @GetMapping("/check")
+    @GetMapping("/checkUsername")
     @ApiOperation("检验用户名是否重复")
     public Result checkUsername(@NotNull @RequestParam("username")String username){
         if(accountService.checkUsername(username)) return Result.success("可以注册");
