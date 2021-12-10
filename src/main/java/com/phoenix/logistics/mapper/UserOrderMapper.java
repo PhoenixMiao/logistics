@@ -35,9 +35,9 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
     List<TmpUserOrder> getBriefUserOrderList(String username);
 
     @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime FROM userOrder WHERE senderUsername=#{username}")
-    List<TmpUserOrder> getBriefUserSendOrderList(String username);
+    List<TmpUserOrder> getBriefSendUserOrderList(String username);
 
-    @Select("SELECT id,senderUsername,receiverUsername,status FROM userOrder WHERE receiverUsername=#{username}")
+    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime FROM userOrder WHERE receiverUsername=#{username}")
     List<TmpUserOrder> getBriefReceiveUserOrderList(String username);
 
     @Update("UPDATE userOrder SET isRead=#{isRead} WHERE id=#{id}")

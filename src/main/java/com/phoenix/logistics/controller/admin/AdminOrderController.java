@@ -62,48 +62,19 @@ public class AdminOrderController {
     }
 
     @RequiresRoles("admin")
-    @GetMapping("/undealed_list")
-    @ApiOperation("获取管理员未处理订单列表")
+    @GetMapping("/list")
+    @ApiOperation("根据订单状态分类获取管理员订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
-            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
-    public Result getBriefUntreatedOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
-                                    @NotNull @RequestParam("pageNum")Integer pageNum){
-        return Result.success(adminOrderService.getBriefAdminUntreatedOrderList(pageNum,pageSize));
+            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "status",value = "要查询的订单状态,用整数表示 0待发货,1运输中,2待收货,3已收货",required = true,paramType = "query",dataType = "Integer")})
+    public Result getBriefAdminOrderListByStatus(@NotNull @RequestParam("pageSize")Integer pageSize,
+                                    @NotNull @RequestParam("pageNum")Integer pageNum,
+                                                 @NotNull @RequestParam("status")Integer status){
+        return Result.success(adminOrderService.getBriefAdminOrderListByStatus(pageNum,pageSize,status));
     }
 
-    @RequiresRoles("admin")
-    @GetMapping("/transporting_list")
-    @ApiOperation("获取管理员运输中订单列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
-            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
-    public Result getBriefTransportingOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
-                                             @NotNull @RequestParam("pageNum")Integer pageNum){
-        return Result.success(adminOrderService.getBriefAdminTransportingOrderList(pageNum,pageSize));
-    }
 
-    @RequiresRoles("admin")
-    @GetMapping("/unreceived_list")
-    @ApiOperation("获取管理员待收货订单列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
-            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
-    public Result getBriefUnrecievedOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
-                                             @NotNull @RequestParam("pageNum")Integer pageNum){
-        return Result.success(adminOrderService.getBriefAdminUnreceivedOrderList(pageNum,pageSize));
-    }
-
-    @RequiresRoles("admin")
-    @GetMapping("/received_list")
-    @ApiOperation("获取管理员已收货订单列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
-            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
-    public Result getBriefRecievedOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
-                                              @NotNull @RequestParam("pageNum")Integer pageNum){
-        return Result.success(adminOrderService.getBriefAdminReceivedOrderList(pageNum,pageSize));
-    }
 
     @RequiresRoles("admin")
     @GetMapping("/message")
