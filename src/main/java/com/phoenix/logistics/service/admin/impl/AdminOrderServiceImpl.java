@@ -113,8 +113,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     @Override
     public Page<BriefAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize,int status){
-        if(status==0)PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
-        else PageHelper.startPage(pageNum, pageSize,"statusUpdateTime asc");
+        if(status==0)PageHelper.startPage(pageNum, pageSize,"statusUpdateTime asc");
+        else PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
         List<AdminOrder> AdminOrderArrayList = adminOrderMapper.getAdminOrderByStatus(status);
         ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
         for(AdminOrder adminOrder:AdminOrderArrayList){

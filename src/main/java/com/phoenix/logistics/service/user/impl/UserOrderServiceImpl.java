@@ -109,7 +109,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 
     @Override
     public Page<BriefUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize,String username,int sendOrRecieve,int status) {
-        PageHelper.startPage(pageNum, pageSize, "statusUpdateTime asc");
+        PageHelper.startPage(pageNum, pageSize, "statusUpdateTime desc");
         List<TmpUserOrder> tmpUserOrderList = null;
         if (sendOrRecieve == 0) {
             tmpUserOrderList = userOrderMapper.getBriefSendUserOrderList(username);
