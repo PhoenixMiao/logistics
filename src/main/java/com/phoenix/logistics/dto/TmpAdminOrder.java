@@ -15,4 +15,5 @@ public class TmpAdminOrder implements Serializable {
     private Long userOrderId;
     private Integer status;
     private String statusUpdateTime;
+    private Long goodsId;
 }

@@ -99,7 +99,8 @@ public class UserOrderServiceImpl implements UserOrderService {
         List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefUserOrderList(username);
         ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
         for(TmpUserOrder tmpUserOrder : tmpUserOrderList){
-            briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime()));
+            Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
+            briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
         }
         PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
         return new Page<BriefUserOrder>(new PageInfo<>(briefUserOrderArrayList));
@@ -108,25 +109,29 @@ public class UserOrderServiceImpl implements UserOrderService {
 
 
     @Override
-    public Page<BriefUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize,String username,int sendOrRecieve,int status) {
+    public Page<BriefUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize,String username,int sendOrReceive,int status) {
         PageHelper.startPage(pageNum, pageSize, "statusUpdateTime desc");
         List<TmpUserOrder> tmpUserOrderList = null;
-        if (sendOrRecieve == 0) {
+        if (sendOrReceive == 0) {
             tmpUserOrderList = userOrderMapper.getBriefSendUserOrderList(username);
         }
-        if (sendOrRecieve == 1) {
+        if (sendOrReceive == 1) {
             tmpUserOrderList = userOrderMapper.getBriefReceiveUserOrderList(username);
         }
         ArrayList<BriefUserOrder> briefSpecificUserOrderArrayList = new ArrayList<>();
         if (status != 4) {
             for (TmpUserOrder tmpUserOrder : tmpUserOrderList) {
+                Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
                 if (tmpUserOrder.getStatus() == status) {
-                    briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getReceiverUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime()));
+                    if(sendOrReceive==0)briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getReceiverUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
+                    else briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getSenderUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
                 }
             }
         } else {
             for (TmpUserOrder tmpUserOrder : tmpUserOrderList) {
-                briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getReceiverUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime()));
+                Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
+                if(sendOrReceive==0)briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getReceiverUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
+                else briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getSenderUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
             }
         }
         return new Page<BriefUserOrder>(new PageInfo<>(briefSpecificUserOrderArrayList));
@@ -138,10 +143,11 @@ public class UserOrderServiceImpl implements UserOrderService {
         List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getUserMessage(0,username);
         ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
         for(TmpUserOrder tmpUserOrder:tmpUserOrderList){
+            Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
             if(tmpUserOrder.getSenderUsername().equals(username)){
-                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime()));
+                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
             }else{
-                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getSenderUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime()));
+                briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getSenderUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
             }
         }
         return briefUserOrderArrayList;

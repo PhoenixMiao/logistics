@@ -18,7 +18,7 @@ public interface UserOrderService {
 
     Page<BriefUserOrder> getBriefUserOrderList(int pageNum, int pageSize,String username);
 
-    Page<BriefUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize,String username,int sendOrRecieve,int status);
+    Page<BriefUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize,String username,int sendOrReceive,int status);
 
     List<BriefUserOrder> getUserMessageList(String username);
 }
