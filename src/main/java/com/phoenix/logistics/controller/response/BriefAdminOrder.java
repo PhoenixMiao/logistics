@@ -29,4 +29,10 @@ public class BriefAdminOrder implements Serializable {
 
     @ApiModelProperty("状态更新时间")
     private String statusUpdateTime;
+
+    @ApiModelProperty("货物名称")
+    private String goodsName;
+
+    @ApiModelProperty("货物种类")
+    private String goodsType;
 }

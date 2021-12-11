@@ -32,7 +32,7 @@ public interface AdminOrderMapper extends MyMapper<AdminOrder> {
     @Select("SELECT * FROM adminOrder WHERE id=#{id}")
     AdminOrder getAdminOrderById(@Param("id") Long id);
 
-    @Select("SELECT id,userOrderId,status,statusUpdateTime FROM adminOrder")
+    @Select("SELECT id,userOrderId,status,statusUpdateTime,goodsId FROM adminOrder")
     List<TmpAdminOrder> getBriefAdminOrderList();
 
     @Select("SELECT * FROM adminOrder WHERE status=#{status}")

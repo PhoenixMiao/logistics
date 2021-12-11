@@ -88,7 +88,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
        for(TmpAdminOrder tmpAdminOrder:tmpAdminOrderArrayList){
            AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(tmpAdminOrder.getId());
            UserOrder userOrder = userOrderMapper.getUserOrderById(tmpAdminOrder.getUserOrderId());
-           briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime()));
+           Goods goods = goodsMapper.getGoodsById(tmpAdminOrder.getGoodsId());
+           briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
        }
        return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
     }
@@ -119,7 +120,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
         for(AdminOrder adminOrder:AdminOrderArrayList){
             UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
-            briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime()));
+            Goods goods = goodsMapper.getGoodsById(adminOrder.getGoodsId());
+            briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
         }
 
         return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
@@ -132,7 +134,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
         for(TmpAdminOrder tmpAdminOrder:tmpAdminOrderList){
             UserOrder userOrder = userOrderMapper.getUserOrderById(tmpAdminOrder.getUserOrderId());
-            briefAdminOrderArrayList.add(new BriefAdminOrder(tmpAdminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),tmpAdminOrder.getStatus(),tmpAdminOrder.getStatusUpdateTime()));
+            Goods goods = goodsMapper.getGoodsById(tmpAdminOrder.getGoodsId());
+            briefAdminOrderArrayList.add(new BriefAdminOrder(tmpAdminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),tmpAdminOrder.getStatus(),tmpAdminOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
         }
         return briefAdminOrderArrayList;
     }
