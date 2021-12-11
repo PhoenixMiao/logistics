@@ -16,4 +16,5 @@ public class TmpUserOrder implements Serializable {
     private String receiverUsername;
     private Integer status;
     private String statusUpdateTime;
+    private Long goodsId;
 }

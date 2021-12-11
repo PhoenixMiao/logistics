@@ -67,7 +67,7 @@ public class UserOrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
             @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "sendOrRecieve", value = "表示要获取用户发出或接收的订单 0表示发出 1表示接收", required = true, paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "sendOrReceive", value = "表示要获取用户发出或接收的订单 0表示发出 1表示接收", required = true, paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "status",value = "要查询的订单状态,用整数表示 0待发货,1运输中,2待收货,3已收货",required = true,paramType = "query",dataType = "Integer")})
     public Result getBriefSendOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
                                     @NotNull @RequestParam("pageNum")Integer pageNum,

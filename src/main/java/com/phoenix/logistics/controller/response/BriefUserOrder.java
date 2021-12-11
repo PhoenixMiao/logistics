@@ -16,7 +16,7 @@ import java.io.Serializable;
 @ApiModel("BriefUserOrder 用户订单列表")
 public class BriefUserOrder implements Serializable {
     @ApiModelProperty("用户订单编号")
-    private Long adminOrderId;
+    private Long OrderId;
 
     @ApiModelProperty("相关人用户名")
     private String relateUsername;
@@ -26,4 +26,10 @@ public class BriefUserOrder implements Serializable {
 
     @ApiModelProperty("状态更新时间")
     private String statusUpdateTime;
+
+    @ApiModelProperty("货物名称")
+    private String goodsName;
+
+    @ApiModelProperty("货物种类")
+    private String goodsType;
 }
