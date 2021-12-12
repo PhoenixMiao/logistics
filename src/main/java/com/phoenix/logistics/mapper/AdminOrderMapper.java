@@ -2,12 +2,8 @@ package com.phoenix.logistics.mapper;
 
 
 import com.phoenix.logistics.MyMapper;
-import com.phoenix.logistics.controller.response.BriefAdminOrder;
-import com.phoenix.logistics.dto.TmpAdminOrder;
+import com.phoenix.logistics.controller.response.TmpAdminOrder;
 import com.phoenix.logistics.entity.AdminOrder;
-import com.phoenix.logistics.entity.User;
-import com.phoenix.logistics.entity.UserOrder;
-import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -34,6 +30,9 @@ public interface AdminOrderMapper extends MyMapper<AdminOrder> {
 
     @Select("SELECT id,userOrderId,status,statusUpdateTime,goodsId FROM adminOrder")
     List<TmpAdminOrder> getBriefAdminOrderList();
+
+    @Select("SELECT id,userOrderId,status,statusUpdateTime,goodsId FROM adminOrder WHERE status=#{status}")
+    List<TmpAdminOrder> getBriefAdminOrderListByStatus(@Param("status")Integer status);
 
     @Select("SELECT * FROM adminOrder WHERE status=#{status}")
     List<AdminOrder> getAdminOrderByStatus(@Param("status") Integer status);

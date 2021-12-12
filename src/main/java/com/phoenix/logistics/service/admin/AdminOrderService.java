@@ -3,11 +3,10 @@ package com.phoenix.logistics.service.admin;
 import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.controller.response.BriefAdminOrder;
 import com.phoenix.logistics.controller.response.OrderDetailResponse;
-import com.phoenix.logistics.dto.TmpAdminOrder;
+import com.phoenix.logistics.controller.response.TmpAdminOrder;
+import com.phoenix.logistics.controller.response.TmpUserOrder;
 import com.phoenix.logistics.entity.AdminOrder;
-import com.phoenix.logistics.entity.UserOrder;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 public interface AdminOrderService {
@@ -17,9 +16,7 @@ public interface AdminOrderService {
 
     OrderDetailResponse getOrderDetailResponse(Long adminOrderId);
 
-    Page<BriefAdminOrder> getBriefAdminOrderList(int pageNum, int pageSize);
-
-    Page<BriefAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize,int status);
+    Page<TmpAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize, int status);
 
     List<BriefAdminOrder> getAdminMessageList();
 }

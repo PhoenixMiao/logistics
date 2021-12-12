@@ -4,19 +4,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
-import com.phoenix.logistics.controller.response.BriefAdminOrder;
 import com.phoenix.logistics.controller.response.BriefUserOrder;
-import com.phoenix.logistics.dto.TmpUserOrder;
+import com.phoenix.logistics.controller.response.TmpUserOrder;
 import com.phoenix.logistics.entity.*;
 import com.phoenix.logistics.enums.GoodsType;
 import com.phoenix.logistics.mapper.*;
 import com.phoenix.logistics.service.user.UserOrderService;
-import com.phoenix.logistics.util.DatesUtil;
 import com.phoenix.logistics.util.DisTranUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -94,47 +91,39 @@ public class UserOrderServiceImpl implements UserOrderService {
 
     }
 
-    @Override
-    public Page<BriefUserOrder> getBriefUserOrderList(int pageNum, int pageSize,String username){
-        List<TmpUserOrder> tmpUserOrderList = userOrderMapper.getBriefUserOrderList(username);
-        ArrayList<BriefUserOrder> briefUserOrderArrayList = new ArrayList<>();
-        for(TmpUserOrder tmpUserOrder : tmpUserOrderList){
-            Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
-            briefUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(),tmpUserOrder.getReceiverUsername(),tmpUserOrder.getStatus(),tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
-        }
-        PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
-        return new Page<BriefUserOrder>(new PageInfo<>(briefUserOrderArrayList));
-    }
-
 
 
     @Override
-    public Page<BriefUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize,String username,int sendOrReceive,int status) {
+    public Page<TmpUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize, String username, int sendOrReceive, int status) {
+//        com.github.pagehelper.Page<TmpUserOrder> tmp = new com.github.pagehelper.Page<TmpUserOrder>();
+        Page<TmpUserOrder> tmpUserOrderPage = new Page<>();
         PageHelper.startPage(pageNum, pageSize, "statusUpdateTime desc");
-        List<TmpUserOrder> tmpUserOrderList = null;
         if (sendOrReceive == 0) {
-            tmpUserOrderList = userOrderMapper.getBriefSendUserOrderList(username);
+            if(status !=4){
+                if(status == 2||status == 3) updateTransportingUserOrderStatus(username);
+                tmpUserOrderPage =  new Page<TmpUserOrder>(new PageInfo<>(userOrderMapper.getBriefSendUserOrderListByStatus(username,status)));
+            }
+            else{
+                tmpUserOrderPage =  new Page<TmpUserOrder>(new PageInfo<>(userOrderMapper.getBriefSendUserOrderList(username)));
+            }
         }
         if (sendOrReceive == 1) {
-            tmpUserOrderList = userOrderMapper.getBriefReceiveUserOrderList(username);
-        }
-        ArrayList<BriefUserOrder> briefSpecificUserOrderArrayList = new ArrayList<>();
-        if (status != 4) {
-            for (TmpUserOrder tmpUserOrder : tmpUserOrderList) {
-                Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
-                if (tmpUserOrder.getStatus() == status) {
-                    if(sendOrReceive==0)briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getReceiverUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
-                    else briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getSenderUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
-                }
+            if(status != 4) {
+                if(status == 2||status == 3) updateTransportingUserOrderStatus(username);
+                tmpUserOrderPage =  new Page<TmpUserOrder>(new PageInfo<>(userOrderMapper.getBriefReceiveUserOrderListByStatus(username,status)));
             }
-        } else {
-            for (TmpUserOrder tmpUserOrder : tmpUserOrderList) {
-                Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
-                if(sendOrReceive==0)briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getReceiverUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
-                else briefSpecificUserOrderArrayList.add(new BriefUserOrder(tmpUserOrder.getId(), tmpUserOrder.getSenderUsername(), tmpUserOrder.getStatus(), tmpUserOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
+            else{
+                tmpUserOrderPage =  new Page<TmpUserOrder>(new PageInfo<>(userOrderMapper.getBriefReceiveUserOrderList(username)));
             }
         }
-        return new Page<BriefUserOrder>(new PageInfo<>(briefSpecificUserOrderArrayList));
+        List<TmpUserOrder> tmpUserOrderList = tmpUserOrderPage.getItems();
+        for(TmpUserOrder tmpUserOrder:tmpUserOrderList){
+            Goods goods = goodsMapper.getGoodsById(tmpUserOrder.getGoodsId());
+            tmpUserOrder.setGoodsName(goods.getName());
+            tmpUserOrder.setGoodsType(goods.getType().getDescription());
+        }
+        tmpUserOrderPage.setItems(tmpUserOrderList);
+        return tmpUserOrderPage;
     }
 
 

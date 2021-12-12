@@ -46,20 +46,10 @@ public class AdminOrderController {
     @GetMapping("/detail")
     @ApiOperation("根据adminOrderId获取订单详情")
     @ApiImplicitParam(name = "id", value = "管理员订单id", required = true, paramType = "query", dataType = "Long")
-    public Result detail(@NotNull@RequestParam("id")Long id){
-        return Result.success("获取成功",adminOrderService.getOrderDetailResponse(id));
+    public Result detail(@NotNull@RequestParam("id")Long id) {
+        return Result.success("获取成功", adminOrderService.getOrderDetailResponse(id));
     }
 
-    @RequiresRoles("admin")
-    @GetMapping("/all_list")
-    @ApiOperation("获取管理员订单全部列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
-            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
-    public Result getBriefOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
-                             @NotNull @RequestParam("pageNum")Integer pageNum){
-        return Result.success(adminOrderService.getBriefAdminOrderList(pageNum,pageSize));
-    }
 
     @RequiresRoles("admin")
     @GetMapping("/list")
@@ -67,7 +57,7 @@ public class AdminOrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
             @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "status",value = "要查询的订单状态,用整数表示 0待发货,1运输中,2待收货,3已收货",required = true,paramType = "query",dataType = "Integer")})
+            @ApiImplicitParam(name = "status",value = "要查询的订单状态,用整数表示 0待发货,1运输中,2待收货,3已收货,4全部订单",required = true,paramType = "query",dataType = "Integer")})
     public Result getBriefAdminOrderListByStatus(@NotNull @RequestParam("pageSize")Integer pageSize,
                                     @NotNull @RequestParam("pageNum")Integer pageNum,
                                                  @NotNull @RequestParam("status")Integer status){

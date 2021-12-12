@@ -71,11 +71,11 @@ public class UserOrderController {
             @ApiImplicitParam(name = "status",value = "要查询的订单状态,用整数表示 0待发货,1运输中,2待收货,3已收货",required = true,paramType = "query",dataType = "Integer")})
     public Result getBriefSendOrderList(@NotNull @RequestParam("pageSize")Integer pageSize,
                                     @NotNull @RequestParam("pageNum")Integer pageNum,
-                                        @NotNull @RequestParam("sendOrRecieve")Integer sendOrRecieve,
+                                        @NotNull @RequestParam("sendOrReceive")Integer sendOrReceive,
                                         @NotNull @RequestParam("status")Integer status){
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
-        return Result.success(userOrderService.getBriefUserOrderListByCondition(pageNum,pageSize,username,sendOrRecieve,status));
+        return Result.success("获取成功",userOrderService.getBriefUserOrderListByCondition(pageNum,pageSize,username,sendOrReceive,status));
     }
 
     @RequiresRoles("user")
