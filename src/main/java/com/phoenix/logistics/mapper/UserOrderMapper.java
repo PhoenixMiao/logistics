@@ -1,13 +1,8 @@
 package com.phoenix.logistics.mapper;
 
 import com.phoenix.logistics.MyMapper;
-import com.phoenix.logistics.controller.response.BriefUserOrder;
-import com.phoenix.logistics.dto.TmpAdminOrder;
-import com.phoenix.logistics.dto.TmpUserOrder;
-import com.phoenix.logistics.entity.AdminOrder;
-import com.phoenix.logistics.entity.User;
+import com.phoenix.logistics.controller.response.TmpUserOrder;
 import com.phoenix.logistics.entity.UserOrder;
-import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -31,14 +26,17 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
     @Select("SELECT * FROM userOrder WHERE status=#{status} AND username=#{username}")
     List<UserOrder> getTransportingUserOrderByStatusAndUsername(@Param("status")Integer status,@Param("username")String username);
 
-    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime FROM userOrder WHERE senderUsername=#{username} OR receiverUsername=#{username}")
-    List<TmpUserOrder> getBriefUserOrderList(String username);
-
     @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE senderUsername=#{username}")
-    List<TmpUserOrder> getBriefSendUserOrderList(String username);
+    List<TmpUserOrder> getBriefSendUserOrderList(@Param("username") String username);
 
     @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE receiverUsername=#{username}")
-    List<TmpUserOrder> getBriefReceiveUserOrderList(String username);
+    List<TmpUserOrder> getBriefReceiveUserOrderList(@Param("username") String username);
+
+    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE senderUsername=#{username} AND status=#{status}")
+    List<TmpUserOrder> getBriefSendUserOrderListByStatus(@Param("username") String username,@Param("status")Integer status);
+
+    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE receiverUsername=#{username} AND status=#{status}")
+    List<TmpUserOrder> getBriefReceiveUserOrderListByStatus(@Param("username") String username,@Param("status")Integer status);
 
     @Update("UPDATE userOrder SET isRead=#{isRead} WHERE id=#{id}")
     void readUserOrder(@Param("isRead")Integer isRead,@Param("id")Long id);

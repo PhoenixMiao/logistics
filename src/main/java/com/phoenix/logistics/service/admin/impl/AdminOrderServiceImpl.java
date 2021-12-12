@@ -6,18 +6,16 @@ import com.github.pagehelper.PageInfo;
 import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.controller.response.BriefAdminOrder;
 import com.phoenix.logistics.controller.response.OrderDetailResponse;
-import com.phoenix.logistics.dto.TmpAdminOrder;
-import com.phoenix.logistics.entity.Admin;
+import com.phoenix.logistics.controller.response.TmpAdminOrder;
+import com.phoenix.logistics.controller.response.TmpUserOrder;
 import com.phoenix.logistics.entity.AdminOrder;
 import com.phoenix.logistics.entity.Goods;
 import com.phoenix.logistics.entity.UserOrder;
 import com.phoenix.logistics.mapper.*;
 import com.phoenix.logistics.service.admin.AdminOrderService;
-import com.phoenix.logistics.util.DisTranUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -79,21 +77,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         return new OrderDetailResponse(goods.getId(),goods.getName(),goods.getType(),goods.getVolume(),goods.getWeight(),goods.getValue(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),userOrder.getStatus(),userOrder.getStatusUpdateTime(),userOrder.getOriginLocation(),userOrder.getDestinationLocation(),userOrder.getCommitTime(),userOrder.getReceiveTime(),adminOrder.getCarId(),adminOrder.getDriverId(),adminOrder.getAdminUsername(),adminOrder.getTransportTime(),adminOrder.getSendTime(),adminOrder.getArriveTime());
     }
 
-    @Override
-    public Page<BriefAdminOrder> getBriefAdminOrderList(int pageNum, int pageSize){
-        updateTransportingAdminOrderStatus();
-        PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
-       List<TmpAdminOrder> tmpAdminOrderArrayList = adminOrderMapper.getBriefAdminOrderList();
-       ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
-       for(TmpAdminOrder tmpAdminOrder:tmpAdminOrderArrayList){
-           AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(tmpAdminOrder.getId());
-           UserOrder userOrder = userOrderMapper.getUserOrderById(tmpAdminOrder.getUserOrderId());
-           Goods goods = goodsMapper.getGoodsById(tmpAdminOrder.getGoodsId());
-           briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
-       }
-       return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
-    }
-
     private void updateTransportingAdminOrderStatus(){
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -113,18 +96,24 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
 
     @Override
-    public Page<BriefAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize,int status){
+    public Page<TmpAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize,int status){
         if(status==0)PageHelper.startPage(pageNum, pageSize,"statusUpdateTime asc");
         else PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
-        List<AdminOrder> AdminOrderArrayList = adminOrderMapper.getAdminOrderByStatus(status);
-        ArrayList<BriefAdminOrder> briefAdminOrderArrayList = new ArrayList<>();
-        for(AdminOrder adminOrder:AdminOrderArrayList){
+        if(status==2||status==3) updateTransportingAdminOrderStatus();
+        Page<TmpAdminOrder> briefAdminOrderPage = new Page<>();
+        if(status!=4)  briefAdminOrderPage = new Page<TmpAdminOrder>(new PageInfo<TmpAdminOrder>(adminOrderMapper.getBriefAdminOrderListByStatus(status)));
+        else briefAdminOrderPage = new Page<TmpAdminOrder>(new PageInfo<TmpAdminOrder>(adminOrderMapper.getBriefAdminOrderList()));
+        List<TmpAdminOrder> briefAdminOrderArrayList = briefAdminOrderPage.getItems();
+        for(TmpAdminOrder adminOrder:briefAdminOrderArrayList){
             UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
             Goods goods = goodsMapper.getGoodsById(adminOrder.getGoodsId());
-            briefAdminOrderArrayList.add(new BriefAdminOrder(adminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),adminOrder.getStatus(),adminOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
+            adminOrder.setGoodsName(goods.getName());
+            adminOrder.setGoodsType(goods.getType().getDescription());
+            adminOrder.setSenderUsername(userOrder.getSenderUsername());
+            adminOrder.setReceiverUsername(userOrder.getReceiverUsername());
         }
-
-        return new Page<BriefAdminOrder>(new PageInfo<>(briefAdminOrderArrayList));
+        briefAdminOrderPage.setItems(briefAdminOrderArrayList);
+        return briefAdminOrderPage;
     }
 
 

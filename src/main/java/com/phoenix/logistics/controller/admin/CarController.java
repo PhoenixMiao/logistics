@@ -58,4 +58,5 @@ public class CarController {
         if(pageParam.getPageNum()==null && pageParam.getPageSize()==null) return Result.success("获得成功",carService.getAllFreeCars());
        return Result.success("获取成功",carService.getAllFreeCars(pageParam.getPageNum(), pageParam.getPageSize()));
     }
+
 }
