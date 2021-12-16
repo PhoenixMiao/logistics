@@ -2,6 +2,7 @@ package com.phoenix.logistics.controller.admin;
 
 import com.phoenix.logistics.common.PageParam;
 import com.phoenix.logistics.common.Result;
+import com.phoenix.logistics.exception.RRException;
 import com.phoenix.logistics.service.admin.DriverService;
 import io.swagger.annotations.*;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -46,9 +47,13 @@ public class DriverController {
     @ApiOperation("删除司机")
     @ApiImplicitParam(name = "id",value = "所要删除司机的id",paramType = "query",dataType = "Long")
     public Result DeleteDriver(@RequestParam(value = "id")Long id){
-        if(driverService.deleteDriver(id) == 1)
-            return Result.fail("该司机正在驾驶车辆，目前不能删除");
-        else return Result.success("删除成功");
+        try{
+            driverService.deleteDriver(id);
+        }catch (RRException e){
+            if(e.getEnumExceptionType().getErrorCode()==1005)
+                return Result.fail("该司机正在驾驶车辆，目前不能删除");
+        }
+        return Result.success("删除成功");
     }
 
     @RequiresRoles("admin")

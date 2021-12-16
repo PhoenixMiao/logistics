@@ -2,9 +2,11 @@ package com.phoenix.logistics.service.admin.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.phoenix.logistics.common.EnumExceptionType;
 import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.entity.Car;
 import com.phoenix.logistics.entity.Driver;
+import com.phoenix.logistics.exception.RRException;
 import com.phoenix.logistics.service.admin.DriverService;
 import com.phoenix.logistics.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +40,10 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public int deleteDriver(Long id){
+    public void deleteDriver(Long id){
         Driver Driver = DriverMapper.getDriverById(id);
-        if(Driver.getStatus()==1) return 1;
+        if(Driver.getStatus()==1) throw new RRException(EnumExceptionType.DRIVER_BEING_USED);
         DriverMapper.deleteDriver(id);
-        return 0;
     }
 
     @Override

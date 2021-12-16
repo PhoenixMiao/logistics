@@ -11,7 +11,7 @@ public interface DriverService {
 
     void addDriver(Integer num);
 
-    int deleteDriver(Long id);
+    void deleteDriver(Long id);
 
     Page<Driver> getAllFreeDrivers(int pageNum,int pageSize);
 

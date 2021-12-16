@@ -2,7 +2,9 @@ package com.phoenix.logistics.service.admin.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.phoenix.logistics.common.EnumExceptionType;
 import com.phoenix.logistics.entity.Car;
+import com.phoenix.logistics.exception.RRException;
 import com.phoenix.logistics.mapper.CarMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,11 +40,10 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public int deleteCar(Long id){
+    public void deleteCar(Long id){
         Car car = carMapper.getCarById(id);
-        if(car.getStatus()==1) return 1;
+        if(car.getStatus()==1) throw new RRException(EnumExceptionType.CAR_BEING_USED);
         carMapper.deleteCar(id);
-        return 0;
     }
 
     @Override

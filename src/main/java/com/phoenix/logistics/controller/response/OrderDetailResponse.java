@@ -1,6 +1,7 @@
 package com.phoenix.logistics.controller.response;
 
 import com.phoenix.logistics.enums.GoodsType;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,6 @@ public class OrderDetailResponse implements Serializable {
 
     @ApiModelProperty("名称")
     private String goodsName;
-
-    @ApiModelProperty("种类")
-    private GoodsType goodsType;
 
     @ApiModelProperty("体积")
     private Double goodsVolume;

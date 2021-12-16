@@ -2,6 +2,7 @@ package com.phoenix.logistics.controller.admin;
 
 import com.phoenix.logistics.common.PageParam;
 import com.phoenix.logistics.common.Result;
+import com.phoenix.logistics.exception.RRException;
 import com.phoenix.logistics.service.admin.CarService;
 import io.swagger.annotations.*;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -46,9 +47,13 @@ public class CarController {
     @ApiOperation("删除车辆")
     @ApiImplicitParam(name = "id",value = "所要删除车辆的id",paramType = "query",dataType = "Long")
     public Result DeleteCar(@RequestParam(value = "id")Long id){
-        if(carService.deleteCar(id) == 1)
-            return Result.fail("该车辆正在被使用，目前不能删除");
-        else return Result.success("删除成功");
+        try{
+            carService.deleteCar(id);
+        }catch(RRException e){
+            if(e.getEnumExceptionType().getErrorCode()==1004)
+                return Result.fail("该车辆正在被使用，目前不能删除");
+        }
+        return Result.success("删除成功");
     }
 
     @RequiresRoles("admin")

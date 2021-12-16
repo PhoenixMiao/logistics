@@ -1,9 +1,11 @@
 package com.phoenix.logistics.controller.account;
 
+import com.phoenix.logistics.common.EnumExceptionType;
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
 import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
 import com.phoenix.logistics.controller.response.GetUserResponse;
 import com.phoenix.logistics.entity.User;
+import com.phoenix.logistics.exception.RRException;
 import com.phoenix.logistics.service.account.AccountService;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
@@ -91,8 +93,11 @@ public class AccountController {
     public Result changePassword(@NotNull @Size(max = 20,min = 6) @RequestParam("password")String password){
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
-        if(accountService.changePassword(username,password)==-1){
-            return Result.fail("新密码不能和旧密码一样！");
+        try {
+            accountService.changePassword(username, password);
+        }catch (RRException e){
+            if(e.getEnumExceptionType().getErrorCode()==1001)
+                return Result.fail("新密码不能和旧密码一样！");
         }
         return Result.success("修改成功！");
     }
@@ -103,10 +108,13 @@ public class AccountController {
     public Result checkPassword(@NotNull @Size(max = 20,min = 6) @RequestParam("password")String password){
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
-        if(!accountService.checkPassword(username,password)){
-            return Result.fail("新密码不能和旧密码一样！");
+        try {
+            accountService.checkPassword(username, password);
+        }catch (RRException e){
+            if(e.getEnumExceptionType().getErrorCode()==1001)
+                return Result.fail("新密码不能和旧密码一样！");
         }
-        else return Result.success("新密码符合规范");
+        return Result.success("新密码符合规范");
     }
 
 
@@ -123,8 +131,13 @@ public class AccountController {
     @GetMapping("/checkUsername")
     @ApiOperation("检验用户名是否重复")
     public Result checkUsername(@NotNull @RequestParam("username")String username){
-        if(accountService.checkUsername(username)) return Result.success("可以注册");
-        else return Result.fail("用户名重复了，请换一个用户名");
+        try{
+            accountService.checkUsername(username);
+        }catch (RRException e){
+            if(e.getEnumExceptionType().getErrorCode()==1002)
+                return Result.fail("用户名重复了，请换一个用户名");
+        }
+        return Result.success("可以注册");
     }
 
     @RequiresRoles("user")
