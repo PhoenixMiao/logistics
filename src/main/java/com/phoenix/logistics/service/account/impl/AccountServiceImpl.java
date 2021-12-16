@@ -42,13 +42,12 @@ public class AccountServiceImpl extends BaseService implements AccountService {
     }
 
     @Override
-    public int changePassword(String username,String password){
+    public void changePassword(String username,String password){
         String originalpassword = userMapper.getPasswordByUsername(username);
         if(originalpassword.equals(PasswordUtil.convert(password))){
-            return -1;
+            throw new RRException(EnumExceptionType.PASSWORD_SAME);
         }
         userMapper.updatePasswordByUsername(PasswordUtil.convert(password),username);
-        return 0;
     }
 
 
@@ -60,12 +59,11 @@ public class AccountServiceImpl extends BaseService implements AccountService {
     }
 
     @Override
-    public boolean checkUsername(String username){
+    public void checkUsername(String username){
         User user = userMapper.getUserByUsername(username);
         if(user!=null){
-            return false;
+            throw new RRException(EnumExceptionType.PASSWORD_SAME);
         }
-        return true;
     }
 
     @Override
@@ -74,8 +72,9 @@ public class AccountServiceImpl extends BaseService implements AccountService {
     }
 
     @Override
-    public boolean checkPassword(String username,String password){
-        if(userMapper.getPasswordByUsername(username).equals(password)) return false;
-        return true;
+    public void checkPassword(String username,String password){
+        if(userMapper.getPasswordByUsername(username).equals(password)){
+            throw new RRException(EnumExceptionType.USER_ALREADY_EXIST);
+        }
     }
 }

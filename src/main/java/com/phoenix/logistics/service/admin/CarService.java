@@ -13,7 +13,7 @@ public interface CarService {
 
     void addCar(Integer num);
 
-    int deleteCar(Long id);
+    void deleteCar(Long id);
 
     Page<Car> getAllFreeCars(int pageNum,int pageSize);
 

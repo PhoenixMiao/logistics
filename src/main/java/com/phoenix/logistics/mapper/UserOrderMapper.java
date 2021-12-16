@@ -23,7 +23,7 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
     @Update("UPDATE userOrder SET adminOrderId=#{adminOrderId} WHERE id=#{id}")
     void beDealed(@Param("adminOrderId")Long adminOrderId,@Param("id")Long id);
 
-    @Select("SELECT * FROM userOrder WHERE status=#{status} AND username=#{username}")
+    @Select("SELECT * FROM userOrder WHERE status=#{status} AND (senderUsername=#{username} OR receiverUsername=#{username})")
     List<UserOrder> getTransportingUserOrderByStatusAndUsername(@Param("status")Integer status,@Param("username")String username);
 
     @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE senderUsername=#{username}")
