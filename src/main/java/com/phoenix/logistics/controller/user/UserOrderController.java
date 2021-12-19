@@ -86,4 +86,21 @@ public class UserOrderController {
         String username = principal.getUsername();
         return Result.success(userOrderService.getUserMessageList(username));
     }
+
+    @RequiresRoles("user")
+    @GetMapping("/search")
+    @ApiOperation("根据订单id进行模糊搜索")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
+            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "sendOrReceive", value = "表示要获取用户发出或接收的订单 0表示发出 1表示接收", required = true, paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "id",value = "搜索框里输入的内容",required = true,paramType = "query",dataType = "Integer")})
+    public Result searchUserOrder(@NotNull @RequestParam("pageSize")Integer pageSize,
+                                   @NotNull @RequestParam("pageNum")Integer pageNum,
+                                   @NotNull @RequestParam("sendOrReceive")Integer sendOrReceive,
+                                   @RequestParam("id") Integer id) {
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        String username = principal.getUsername();
+        return Result.success("搜索成功！",userOrderService.searchUserOrder(pageNum,pageSize,id,username,sendOrReceive));
+    }
 }

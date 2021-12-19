@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -73,4 +74,17 @@ public class AdminOrderController {
         return Result.success("获取成功",adminOrderService.getAdminMessageList());
     }
 
+
+    @RequiresRoles("admin")
+    @GetMapping("/search")
+    @ApiOperation("根据订单id进行模糊搜索")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
+            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "id",value = "搜索框里输入的内容",required = true,paramType = "query",dataType = "Integer")})
+    public Result searchAdminOrder(@NotNull @RequestParam("pageSize")Integer pageSize,
+                                   @NotNull @RequestParam("pageNum")Integer pageNum,
+                                   @RequestParam("id") Integer id){
+        return Result.success("获取成功",adminOrderService.searchAdminOrder(pageNum,pageSize,id));
+    }
 }
