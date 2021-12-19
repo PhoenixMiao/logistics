@@ -19,4 +19,6 @@ public interface AdminOrderService {
     Page<TmpAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize, int status);
 
     List<BriefAdminOrder> getAdminMessageList();
+
+    Page<TmpAdminOrder> searchAdminOrder(int pageNum,int pageSize,Integer id);
 }

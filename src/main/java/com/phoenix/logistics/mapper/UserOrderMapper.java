@@ -43,4 +43,11 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
 
     @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime FROM userOrder WHERE isRead=#{isRead} AND (senderUsername=#{username} OR receiverUsername=#{username})")
     List<TmpUserOrder> getUserMessage(@Param("isRead")Integer isRead,@Param("username")String usename);
+
+    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE senderUsername=#{username} AND id LIKE CONCAT('%',#{id,jdbcType=VARCHAR},'%')")
+    List<TmpUserOrder> searchSendUserOrder(@Param("username") String username,@Param("id")Integer id);
+
+    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE receiverUsername=#{username} AND id LIKE CONCAT('%',#{id,jdbcType=VARCHAR},'%')")
+    List<TmpUserOrder> searchReceiveUserOrder(@Param("username") String username,@Param("id")Integer id);
+
 }

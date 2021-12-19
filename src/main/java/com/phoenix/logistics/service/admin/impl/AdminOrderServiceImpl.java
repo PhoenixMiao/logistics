@@ -13,6 +13,7 @@ import com.phoenix.logistics.entity.Goods;
 import com.phoenix.logistics.entity.UserOrder;
 import com.phoenix.logistics.mapper.*;
 import com.phoenix.logistics.service.admin.AdminOrderService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -127,5 +128,23 @@ public class AdminOrderServiceImpl implements AdminOrderService {
             briefAdminOrderArrayList.add(new BriefAdminOrder(tmpAdminOrder.getId(),userOrder.getSenderUsername(),userOrder.getReceiverUsername(),tmpAdminOrder.getStatus(),tmpAdminOrder.getStatusUpdateTime(),goods.getName(),goods.getType().getDescription()));
         }
         return briefAdminOrderArrayList;
+    }
+
+    @Override
+    public Page<TmpAdminOrder> searchAdminOrder(int pageNum, int pageSize,Integer id){
+        updateTransportingAdminOrderStatus();
+        if(id==null) return getBriefAdminOrderListByStatus(pageNum,pageSize,4);
+        PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
+        Page<TmpAdminOrder> briefAdminOrderPage = new Page<TmpAdminOrder>(new PageInfo<TmpAdminOrder>(adminOrderMapper.searchAdminOrder(id)));
+        List<TmpAdminOrder> briefAdminOrderArrayList = briefAdminOrderPage.getItems();
+        for(TmpAdminOrder adminOrder:briefAdminOrderArrayList){
+            UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
+            Goods goods = goodsMapper.getGoodsById(adminOrder.getGoodsId());
+            adminOrder.setGoodsName(goods.getName());
+            adminOrder.setGoodsType(goods.getType().getDescription());
+            adminOrder.setSenderUsername(userOrder.getSenderUsername());
+            adminOrder.setReceiverUsername(userOrder.getReceiverUsername());
+        }
+        return briefAdminOrderPage;
     }
 }

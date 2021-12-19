@@ -19,4 +19,6 @@ public interface UserOrderService {
     Page<TmpUserOrder> getBriefUserOrderListByCondition(int pageNum, int pageSize, String username, int sendOrReceive, int status);
 
     List<BriefUserOrder> getUserMessageList(String username);
+
+    Page<TmpUserOrder> searchUserOrder(int pageNum, int pageSize,Integer id,String username,int sendOrReceive);
 }

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.phoenix.logistics.common.Page;
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
 import com.phoenix.logistics.controller.response.BriefUserOrder;
+import com.phoenix.logistics.controller.response.TmpAdminOrder;
 import com.phoenix.logistics.controller.response.TmpUserOrder;
 import com.phoenix.logistics.entity.*;
 import com.phoenix.logistics.enums.GoodsType;
@@ -140,5 +141,27 @@ public class UserOrderServiceImpl implements UserOrderService {
             }
         }
         return briefUserOrderArrayList;
+    }
+
+    @Override
+    public Page<TmpUserOrder> searchUserOrder(int pageNum, int pageSize, Integer id,String username,int sendOrReceive){
+        updateTransportingUserOrderStatus(username);
+        if(id==null) return getBriefUserOrderListByCondition(pageNum,pageSize,username,sendOrReceive,4);
+        Page<TmpUserOrder> briefUserOrderPage = new Page<>();
+        PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
+        if(sendOrReceive==0)
+            briefUserOrderPage = new Page<TmpUserOrder>(new PageInfo<TmpUserOrder>(userOrderMapper.searchSendUserOrder(username,id)));
+        else
+            briefUserOrderPage = new Page<TmpUserOrder>(new PageInfo<TmpUserOrder>(userOrderMapper.searchReceiveUserOrder(username,id)));
+        List<TmpUserOrder> briefUserOrderArrayList = briefUserOrderPage.getItems();
+        for(TmpUserOrder tmpUserOrder:briefUserOrderArrayList){
+            UserOrder userOrder = userOrderMapper.getUserOrderById(tmpUserOrder.getId());
+            Goods goods = goodsMapper.getGoodsById(userOrder.getGoodsId());
+            tmpUserOrder.setGoodsName(goods.getName());
+            tmpUserOrder.setGoodsType(goods.getType().getDescription());
+            tmpUserOrder.setSenderUsername(userOrder.getSenderUsername());
+            tmpUserOrder.setReceiverUsername(userOrder.getReceiverUsername());
+        }
+        return briefUserOrderPage;
     }
 }

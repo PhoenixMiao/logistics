@@ -42,4 +42,7 @@ public interface AdminOrderMapper extends MyMapper<AdminOrder> {
 
     @Select("SELECT id,userOrderId,status,statusUpdateTime FROM adminOrder WHERE isRead=#{isRead}")
     List<TmpAdminOrder> getAdminMessage(@Param("isRead")Integer isRead);
+
+    @Select("SELECT id,userOrderId,status,statusUpdateTime,goodsId FROM adminOrder WHERE id LIKE CONCAT('%',#{id,jdbcType=VARCHAR},'%')")
+    List<TmpAdminOrder> searchAdminOrder(@Param("id")Integer id);
 }
