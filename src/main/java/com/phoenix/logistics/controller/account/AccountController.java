@@ -3,7 +3,9 @@ package com.phoenix.logistics.controller.account;
 import com.phoenix.logistics.common.EnumExceptionType;
 import com.phoenix.logistics.controller.request.SubmitUserOrderRequest;
 import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
+import com.phoenix.logistics.controller.response.GetAdminResponse;
 import com.phoenix.logistics.controller.response.GetUserResponse;
+import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.User;
 import com.phoenix.logistics.exception.RRException;
 import com.phoenix.logistics.service.account.AccountService;
@@ -61,7 +63,7 @@ public class AccountController {
         }
 
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
-        if(principal.getType()==1) return Result.success("登录成功",principal);
+        if(principal.getType()==1) return Result.success("登录成功",new GetAdminResponse(accountService.getAdmin(username),principal.getType()));
         return Result.success("登录成功", new GetUserResponse(accountService.getUser(username),principal.getType()));
     }
 
@@ -141,12 +143,22 @@ public class AccountController {
     }
 
     @RequiresRoles("user")
-    @GetMapping("/all")
+    @GetMapping("/user/all")
     @ApiOperation("获取一个用户的所有信息")
     public Result getUser(){
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
         User user = accountService.getUser(username);
         return Result.success("获取成功",new GetUserResponse(user,principal.getType()));
+    }
+
+    @RequiresRoles("admin")
+    @GetMapping("/admin/all")
+    @ApiOperation("获取一个管理员的所有信息")
+    public Result getAdmin(){
+        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
+        String username = principal.getUsername();
+        Admin admin = accountService.getAdmin(username);
+        return Result.success("获取成功",new GetAdminResponse(admin,principal.getType()));
     }
 }

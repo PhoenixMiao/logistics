@@ -33,32 +33,12 @@ public class ShiroConfig {
     @Bean(name = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-
-
-//        //自定义过滤器
-//        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
-//        // 注意这里不要用Bean的方式，否则会报错
-//        filters.put("myRole", new MyRoleFilter());
-//        shiroFilterFactoryBean.setFilters(filters);
-
-
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl("/unauth");
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauth");
 
 
-
         Map<String, String> hashMap = new LinkedHashMap<>();
-
-//        hashMap.put("/**", "authc");
-
-        //test
-        hashMap.put("/unauth", "anon");
-        hashMap.put("/userTest", "roles[user]");
-        hashMap.put("/adminTest", "roles[admin]");
-        hashMap.put("/anonTest", "anon");
-        hashMap.put("/exception", "anon");
-
 
         //swagger2
         hashMap.put("/swagger-ui.html", "anon");
@@ -69,44 +49,41 @@ public class ShiroConfig {
         hashMap.put("/configuration/**", "anon");
 
         //account
-        hashMap.put("/password", "anon");
-        hashMap.put("/verifyCode/password", "anon");
-//        hashMap.put("/auth", "roles[user]");
-        hashMap.put("/signIn", "anon");
-        hashMap.put("/signOut", "anon");
-        hashMap.put("/signUp", "anon");
-        hashMap.put("/signUp/**", "anon");
+        hashMap.put("/account/checkPassword", "anon");
+        hashMap.put("/account/changPassword", "anon");
+        hashMap.put("/account/changMessage", "anon");
+        hashMap.put("/account/checkUsername", "anon");
+        hashMap.put("/account/signIn", "anon");
+        hashMap.put("/account/signOut", "anon");
+        hashMap.put("/account/signUp", "anon");
+        hashMap.put("/account/user/all", "roles[user]");
 
-        //admin
-        hashMap.put("/admin", "roles[admin]");
-        hashMap.put("/admin/userLogin/today", "roles[admin]");
-        hashMap.put("/admin/member", "roles[admin]");
-        hashMap.put("/admin/buyHistoryStatics", "roles[admin]");
-        hashMap.put("/admin/buyHistoryStatics/**", "roles[admin]");
-        hashMap.put("/admin/ buyHistory", "roles[admin]");
+        //adminOrder
+        hashMap.put("/admin_order/deal", "roles[admin]");
+        hashMap.put("/admin_order/detail", "roles[admin]");
+        hashMap.put("/admin_order/message", "roles[admin]");
+        hashMap.put("/admin_order/search", "roles[admin]");
+        hashMap.put("/admin_order/list", "roles[admin]");
 
-        //company
-//        hashMap.put("/company", "myRole[company]");
-//        hashMap.put("/company/**", "myRole[company]");
+        //car
+        hashMap.put("/car/list", "roles[admin]");
+        hashMap.put("/car/add", "roles[admin]");
+        hashMap.put("/car/delete", "roles[admin]");
+        hashMap.put("/car/free", "roles[admin]");
 
-        //fileReader
-        hashMap.put("/file/company/logo/**", "anon");
-        hashMap.put("/file/company/content/**", "anon");
+        //driver
+        hashMap.put("/driver/list", "roles[admin]");
+        hashMap.put("/driver/add", "roles[admin]");
+        hashMap.put("/driver/delete", "roles[admin]");
+        hashMap.put("/driver/free", "roles[admin]");
 
-        //homepage
-//        hashMap.put("/collection", "roles[user]");
-//        hashMap.put("/collection/**", "roles[user]");
-        hashMap.put("/homepage/**", "anon");
-        hashMap.put("/search/**", "anon");
-        hashMap.put("/visit/**", "anon");
-
-//        //member
-//        hashMap.put("/member", "roles[user]");
-//        hashMap.put("/member/**", "roles[user]");
-
-
-        hashMap.put("/**", "anon");
-
+        //userOrder
+        hashMap.put("/user_order/submit", "roles[user]");
+        hashMap.put("/user_order/detail", "roles[user]");
+        hashMap.put("/user_order/message", "roles[user]");
+        hashMap.put("/user_order/search", "roles[user]");
+        hashMap.put("/user_order/list", "roles[user]");
+        hashMap.put("/user_order/receive", "roles[user]");
 
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(hashMap);
@@ -133,21 +110,6 @@ public class ShiroConfig {
         defaultAAP.setProxyTargetClass(true);
         return defaultAAP;
     }
-
-//    /**
-//     * 处理未授权的异常，返回自定义的错误页面（403）
-//     * @return
-//     */
-//    @Bean
-//    public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
-//        SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
-//        Properties properties = new Properties();
-//        /*未授权处理页*/
-//        properties.setProperty("UnauthorizedException", "classpath:403.html");
-//        resolver.setExceptionMappings(properties);
-//        return resolver;
-//    }
-
 
 
 

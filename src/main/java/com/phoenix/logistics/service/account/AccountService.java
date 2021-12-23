@@ -2,6 +2,7 @@ package com.phoenix.logistics.service.account;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
+import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.User;
 
 public interface AccountService {
@@ -18,4 +19,6 @@ public interface AccountService {
     void checkUsername(String username);
 
     User getUser(String username);
+
+    Admin getAdmin(String username);
 }
