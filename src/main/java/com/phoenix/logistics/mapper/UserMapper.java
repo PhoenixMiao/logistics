@@ -2,6 +2,7 @@ package com.phoenix.logistics.mapper;
 
 import com.phoenix.logistics.MyMapper;
 import com.phoenix.logistics.controller.response.BriefUserOrder;
+import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.User;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Insert;
@@ -23,7 +24,7 @@ public interface UserMapper extends MyMapper<User> {
     @Select("SELECT password FROM user WHERE username=#{username}")
     String getPasswordByUsername(@Param("username")String username);
 
-    @Select("SELECT * FROM user WHERE username=#{username}")
+    @Select("SELECT id,username,password,gender,telephone,residence FROM user WHERE username=#{username}")
     User getUserByUsername(String username);
 
     @Select("SELECT * FROM user WHERE id=#{id}")
@@ -41,5 +42,6 @@ public interface UserMapper extends MyMapper<User> {
     @Update("UPDATE user SET telephone=#{telephone} WHERE username=#{username}")
     void updateUserTelephone(@Param("telephone")String telephone,@Param("username")String username);
 
-
+    @Select("SELECT * FROM admin WHERE username=#{username}")
+    Admin getAdminByUsername(@Param("username")String username);
 }

@@ -37,24 +37,13 @@ public class MyRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         //管理员
-        if(type == 1){
-//            info.addRole("user");
+        if(type == 1)
             info.addRole("admin");
-//            Admin_role admin_role = admin_roleMapper.getAdmin_roleByUsername(username);
-//            if(admin_role != null && admin_role.getSuperior() == 1){
-//                info.addRole("superior");
-//            }
-        }
 
         //普通用户
-        if(type == 0){
+        if(type == 0)
             info.addRole("user");
-//            User_role user_role = user_roleMapper.getUser_roleByUsername(username);
-//            if(user_role != null && user_role.getCompany() == 1){
-//                info.addRole("company");
-//            }
 
-        }
         return info;
     }
 

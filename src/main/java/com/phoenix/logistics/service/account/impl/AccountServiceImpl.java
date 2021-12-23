@@ -1,6 +1,7 @@
 package com.phoenix.logistics.service.account.impl;
 
 import com.phoenix.logistics.controller.request.UpdateUserMessageRequest;
+import com.phoenix.logistics.entity.Admin;
 import com.phoenix.logistics.entity.User;
 import com.phoenix.logistics.exception.RRException;
 import com.phoenix.logistics.mapper.AdminMapper;
@@ -43,8 +44,8 @@ public class AccountServiceImpl extends BaseService implements AccountService {
 
     @Override
     public void changePassword(String username,String password){
-        String originalpassword = userMapper.getPasswordByUsername(username);
-        if(originalpassword.equals(PasswordUtil.convert(password))){
+        String originalPassword = userMapper.getPasswordByUsername(username);
+        if(originalPassword.equals(PasswordUtil.convert(password))){
             throw new RRException(EnumExceptionType.PASSWORD_SAME);
         }
         userMapper.updatePasswordByUsername(PasswordUtil.convert(password),username);
@@ -76,5 +77,10 @@ public class AccountServiceImpl extends BaseService implements AccountService {
         if(userMapper.getPasswordByUsername(username).equals(password)){
             throw new RRException(EnumExceptionType.USER_ALREADY_EXIST);
         }
+    }
+
+    @Override
+    public Admin getAdmin(String username){
+        return userMapper.getAdminByUsername(username);
     }
 }
