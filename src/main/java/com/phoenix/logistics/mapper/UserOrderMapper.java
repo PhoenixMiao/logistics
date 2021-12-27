@@ -41,7 +41,7 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
     @Update("UPDATE userOrder SET isRead=#{isRead} WHERE id=#{id}")
     void readUserOrder(@Param("isRead")Integer isRead,@Param("id")Long id);
 
-    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime FROM userOrder WHERE isRead=#{isRead} AND (senderUsername=#{username} OR receiverUsername=#{username})")
+    @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE isRead=#{isRead} AND (senderUsername=#{username} OR receiverUsername=#{username})")
     List<TmpUserOrder> getUserMessage(@Param("isRead")Integer isRead,@Param("username")String usename);
 
     @Select("SELECT id,senderUsername,receiverUsername,status,statusUpdateTime,goodsId FROM userOrder WHERE senderUsername=#{username} AND id LIKE CONCAT('%',#{id,jdbcType=VARCHAR},'%')")

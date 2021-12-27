@@ -59,9 +59,13 @@ public class CarController {
     @RequiresRoles("admin")
     @GetMapping("/free")
     @ApiOperation("获取空闲车辆的列表")
-    public Result getAllFreeCars(@NotNull @Valid @RequestBody PageParam pageParam) {
-        if(pageParam.getPageNum()==null && pageParam.getPageSize()==null) return Result.success("获得成功",carService.getAllFreeCars());
-       return Result.success("获取成功",carService.getAllFreeCars(pageParam.getPageNum(), pageParam.getPageSize()));
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
+            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer")})
+    public Result getAllFreeCars(@RequestParam("pageSize")Integer pageSize,
+                                 @RequestParam("pageNum")Integer pageNum) {
+        if(pageSize==null && pageNum==null) return Result.success("获得成功",carService.getAllFreeCars());
+       return Result.success("获取成功",carService.getAllFreeCars(pageNum, pageSize));
     }
 
 }

@@ -37,12 +37,16 @@ public class MyRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         //管理员
-        if(type == 1)
+        if(type == 1){
             info.addRole("admin");
+            info.addRole("online");
+        }
 
         //普通用户
-        if(type == 0)
+        if(type == 0){
             info.addRole("user");
+            info.addRole("online");
+        }
 
         return info;
     }
@@ -65,8 +69,8 @@ public class MyRealm extends AuthorizingRealm {
         Admin admin = adminMapper.getAdminByUsername(username);
         if(admin != null && (admin.getPassword()+"").equals(password)){
             UserDTO userDTO = new UserDTO(admin);
-
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDTO, token.getCredentials(), getName());
+
             return info;
         }
 

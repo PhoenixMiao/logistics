@@ -142,23 +142,18 @@ public class AccountController {
         return Result.success("可以注册");
     }
 
-    @RequiresRoles("user")
-    @GetMapping("/user/all")
-    @ApiOperation("获取一个用户的所有信息")
-    public Result getUser(){
+    @RequiresRoles("online")
+    @GetMapping("/all")
+    @ApiOperation("获取一个登录者的所有信息")
+    public Result getMessage(){
         UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
         String username = principal.getUsername();
-        User user = accountService.getUser(username);
-        return Result.success("获取成功",new GetUserResponse(user,principal.getType()));
-    }
-
-    @RequiresRoles("admin")
-    @GetMapping("/admin/all")
-    @ApiOperation("获取一个管理员的所有信息")
-    public Result getAdmin(){
-        UserDTO principal = (UserDTO) SecurityUtils.getSubject().getPrincipal();
-        String username = principal.getUsername();
-        Admin admin = accountService.getAdmin(username);
-        return Result.success("获取成功",new GetAdminResponse(admin,principal.getType()));
+        if(principal.getType()==0){
+            User user = accountService.getUser(username);
+            return Result.success("获取成功",new GetUserResponse(user,principal.getType()));
+        }else{
+            Admin admin = accountService.getAdmin(username);
+            return Result.success("获取成功",new GetAdminResponse(admin,principal.getType()));
+        }
     }
 }
