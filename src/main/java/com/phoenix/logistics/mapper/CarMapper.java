@@ -18,10 +18,10 @@ public interface CarMapper extends MyMapper<Car> {
     @Insert("INSERT INTO car VALUES (null,#{status})")
     int insertCar(@Param("status") Integer status);
 
-    @Select("SELECT FROM car WHERE id=#{id}")
+    @Select("SELECT * FROM car WHERE id=#{id}")
     Car getCarById(@Param("id") Long id);
 
-    @Delete("DELETE FROM car WHERE id=#{id};")
+    @Delete("DELETE FROM car WHERE id=#{id}")
     void deleteCar(@Param("id") Long id);
 
     @Update("UPDATE car SET status=#{status} WHERE id=#{id}")

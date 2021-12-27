@@ -16,7 +16,7 @@ public interface DriverMapper {
     @Insert("INSERT INTO driver VALUES (null,#{status})")
     int insertDriver(@Param("status") Integer status);
 
-    @Select("SELECT FROM driver WHERE id=#{id}")
+    @Select("SELECT * FROM driver WHERE id=#{id}")
     Driver getDriverById(@Param("id") Long id);
 
     @Delete("DELETE FROM driver WHERE id=#{id}")
