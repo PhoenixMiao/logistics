@@ -59,6 +59,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         String currentTime = simpleDateFormat.format(date);
         userOrderMapper.changStatus(3,currentTime,id);
         userOrderMapper.readUserOrder(0,id);
+        userOrderMapper.receiveGoods(currentTime,id);
         AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(userOrder.getAdminOrderId());
         if(adminOrder.getStatus()!=2) return 0;
         adminOrderMapper.changeStatus(3,currentTime,adminOrder.getId());
@@ -101,7 +102,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         PageHelper.startPage(pageNum, pageSize, "statusUpdateTime desc");
         if (sendOrReceive == 0) {
             if(status !=4){
-                if(status == 2||status == 3) updateTransportingUserOrderStatus(username);
+                if(status!=0) updateTransportingUserOrderStatus(username);
                 tmpUserOrderPage =  new Page<TmpUserOrder>(new PageInfo<>(userOrderMapper.getBriefSendUserOrderListByStatus(username,status)));
             }
             else{
@@ -110,7 +111,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         }
         if (sendOrReceive == 1) {
             if(status != 4) {
-                if(status == 2||status == 3) updateTransportingUserOrderStatus(username);
+                if(status!=0) updateTransportingUserOrderStatus(username);
                 tmpUserOrderPage =  new Page<TmpUserOrder>(new PageInfo<>(userOrderMapper.getBriefReceiveUserOrderListByStatus(username,status)));
             }
             else{
