@@ -17,6 +17,9 @@ public interface UserOrderMapper extends MyMapper<UserOrder>{
     @Update("UPDATE userOrder SET status=#{status},statusUpdateTime=#{statusUpdateTime} WHERE id=#{id}")
     void changStatus(@Param("status")Integer status,@Param("statusUpdateTime")String statusUpdateTime,@Param("id")Long id);
 
+    @Update("UPDATE userOrder SET receiveTime=#{receiveTime} WHERE id=#{id}")
+    void receiveGoods(@Param("receiveTime")String receiveTime,@Param("id")Long id);
+
     @Select("SELECT * FROM userOrder WHERE id=#{id}")
     UserOrder getUserOrderById(@Param("id")Long id);
 

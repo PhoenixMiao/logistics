@@ -70,6 +70,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     @Override
     public OrderDetailResponse getOrderDetailResponse(Long adminOrderId){
+        updateTransportingAdminOrderStatus();
         AdminOrder adminOrder = adminOrderMapper.getAdminOrderById(adminOrderId);
         UserOrder userOrder = userOrderMapper.getUserOrderById(adminOrder.getUserOrderId());
         Goods goods = goodsMapper.getGoodsById(userOrder.getGoodsId());
@@ -100,7 +101,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     public Page<TmpAdminOrder> getBriefAdminOrderListByStatus(int pageNum, int pageSize,int status){
         if(status==0)PageHelper.startPage(pageNum, pageSize,"statusUpdateTime asc");
         else PageHelper.startPage(pageNum, pageSize,"statusUpdateTime desc");
-        if(status==2||status==3) updateTransportingAdminOrderStatus();
+        updateTransportingAdminOrderStatus();
         Page<TmpAdminOrder> briefAdminOrderPage = new Page<>();
         if(status!=4)  briefAdminOrderPage = new Page<TmpAdminOrder>(new PageInfo<TmpAdminOrder>(adminOrderMapper.getBriefAdminOrderListByStatus(status)));
         else briefAdminOrderPage = new Page<TmpAdminOrder>(new PageInfo<TmpAdminOrder>(adminOrderMapper.getBriefAdminOrderList()));
